@@ -1,8 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import type { BadgeProps } from '@/components/ui/badge';
 import {
   Search,
   Filter,
@@ -57,7 +58,7 @@ const Tools: React.FC = () => {
   const [sortBy, setSortBy] = useState('popular');
   const [priceRange, setPriceRange] = useState('all');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
   const isMobile = useIsMobile();
 
   // Fetch products from API
@@ -227,36 +228,51 @@ const Tools: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen py-12 bg-gradient-to-br from-gray-50/50 via-white to-blue-50/30 dark:from-gray-950 dark:via-gray-900 dark:to-blue-950/20">
-      <div className="container mx-auto px-4">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-100 to-red-100 dark:from-orange-950/30 dark:to-red-950/30 text-orange-800 dark:text-orange-300 px-4 py-2 rounded-full text-sm font-semibold mb-6 border border-orange-200 dark:border-orange-800/30">
-            <Zap className="h-4 w-4" /> LIMITED TIME OFFER
+    <div className="min-h-screen py-12">
+      {/* Hero Banner */}
+      <div className="relative mb-0">
+        <picture>
+          <source
+            srcSet="/get-paid-subscriptions-at-mobile.png"
+            media="(max-width: 767px)"
+          />
+          <img
+            src="/get-paid-subscriptions-at-desktop.png"
+            alt="Hero Banner"
+            className="w-full h-[300px] md:h-[400px] object-cover object-center"
+            style={{ maxHeight: '400px' }}
+          />
+        </picture>
+      </div>
+      {/* Hero Text Section (below image) */}
+      <div className="container mx-auto px-4 mt-8 text-center">
+        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-100 to-red-100 dark:from-orange-950/30 dark:to-red-950/30 text-orange-800 dark:text-orange-300 px-4 py-2 rounded-full text-sm font-semibold mb-6 border border-orange-200 dark:border-orange-800/30 backdrop-blur-sm justify-center">
+          <Zap className="h-4 w-4" /> LIMITED TIME OFFER
+        </div>
+        <h1 className="text-4xl md:text-6xl font-black mb-8 tracking-tight text-foreground text-center">
+          <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent">
+            Premium Subscriptions
+          </span>
+          <br />
+          <span className="bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
+            Huge Discounts
+          </span>
+        </h1>
+        <p className="text-xl text-muted-foreground mb-10 max-w-4xl mx-auto leading-relaxed">
+          Get access to the world's best AI, SEO, design, and productivity tools and subscriptions. 
+          All at affordable and reasonable rates with full premium features.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mb-8">
+          <div className="text-lg px-6 py-3 font-bold shadow-lg animate-pulse inline-flex items-center rounded-full bg-destructive text-destructive-foreground">
+            <Clock className="mr-2 h-4 w-4" /> LIMITED TIME: Unbeatable Discounted Rates
           </div>
-          <h1 className="text-4xl md:text-6xl font-black mb-8 tracking-tight">
-            <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent">
-              Premium Tools
-            </span>
-            <br />
-            <span className="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-              50% OFF
-            </span>
-          </h1>
-          <p className="text-xl text-muted-foreground mb-10 max-w-4xl mx-auto leading-relaxed">
-            Get instant access to the world's best AI, SEO, design, and productivity tools. 
-            All at half the price with full premium features and lifetime access.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
-            <Badge variant="destructive" className="text-lg px-6 py-3 font-bold shadow-lg animate-pulse">
-              <Clock className="mr-2 h-4 w-4" /> LIMITED TIME: 50% OFF EVERYTHING
-            </Badge>
-            <Badge className="bg-green-600 text-white px-4 py-2 font-semibold">
-              <Sparkles className="mr-1 h-4 w-4" /> Instant Setup • <Shield className="mr-1 h-4 w-4" /> Money Back Guarantee
-            </Badge>
+          <div className="bg-green-600 text-white px-4 py-2 font-semibold inline-flex items-center rounded-full">
+            <Sparkles className="mr-1 h-4 w-4" /> Instant Setup <Shield className="mr-1 h-4 w-4" /> Money Back Guarantee  <Clock className="mr-1 h-4 w-4" /> 24/7 Support
           </div>
         </div>
-
+      </div>
+      {/* Search and Filters */}
+      <div className="container mx-auto px-4">
         {/* Search and Filters */}
         <Card className="mb-8 shadow-xl border-2 border-gray-200/50 dark:border-gray-700/50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
           <CardContent className="p-6">
@@ -414,7 +430,9 @@ const Tools: React.FC = () => {
               : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
           )}>
             {filteredProducts.map((product) => (
-              <ProductCardSimple key={product.id} product={product} viewMode={viewMode} />
+              <div key={product.id}>
+                <ProductCardSimple product={product} viewMode={viewMode} />
+              </div>
             ))}
           </div>
         ) : (

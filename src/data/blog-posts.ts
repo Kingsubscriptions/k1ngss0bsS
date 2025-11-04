@@ -186,7 +186,7 @@ export const defaultBlogPosts: BlogPost[] = [
       "• You need specialized design tools",
       "ROI Analysis",
       "Canva Pro typically offers 4x better ROI for small businesses due to its lower cost and faster learning curve. Most users see a return on investment within 2-3 months.",
-      "Ready to choose the right design tool for your business? Get Canva Pro at 50% off with King Subs and start creating professional designs today."
+  "Ready to choose the right design tool for your business? Get Canva Pro at Huge Discounts with King Subs and start creating professional designs today."
     ],
     published: true,
     readTime: "14 min read",

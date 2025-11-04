@@ -567,7 +567,7 @@ export const products: Product[] = [
       "Top-rated instructors",
       "For 1 Device"
     ],
-    "image": "https://s.udemycdn.com/meta/default-meta-image-v2.png",
+    "image": "https://logo.clearbit.com/udemy.com",
     "plans": [
       {
         "type": "Premium Account",
@@ -599,7 +599,7 @@ export const products: Product[] = [
       "Site Audit",
       "Content Marketing Toolkit"
     ],
-    "image": "https://cdn.semrush.com/kb/static/img/logo.b536aa5942c4.png",
+    "image": "https://logo.clearbit.com/semrush.com",
     "plans": [
       {
         "type": "Shared Account",
@@ -631,7 +631,7 @@ export const products: Product[] = [
       "Listing Optimization",
       "For FBA Sellers"
     ],
-    "image": "https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?auto=format&fit=crop&w=400&h=240",
+    "image": "https://logo.clearbit.com/helium10.com",
     "plans": [
       {
         "type": "Shared Account",
@@ -663,7 +663,7 @@ export const products: Product[] = [
       "Multiple Content Templates",
       "Brand Voice & Tone"
     ],
-    "image": "https://images.unsplash.com/photo-1677756223233-5290b8f04c64?auto=format&fit=crop&w=400&h=240",
+    "image": "https://logo.clearbit.com/jasper.ai",
     "plans": [
       {
         "type": "Shared Account",
@@ -695,7 +695,7 @@ export const products: Product[] = [
       "Freestyle Text Generation",
       "Ideal for Marketers"
     ],
-    "image": "https://images.unsplash.com/photo-1516132006923-6cf348e5c24e?auto=format&fit=crop&w=400&h=240",
+    "image": "https://logo.clearbit.com/copy.ai",
     "plans": [
       {
         "type": "Shared Account",
@@ -727,7 +727,7 @@ export const products: Product[] = [
       "SEO Audit Tool",
       "Keyword Research"
     ],
-    "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=400&h=240",
+    "image": "https://logo.clearbit.com/surferseo.com",
     "plans": [
       {
         "type": "Shared Account",
@@ -759,7 +759,7 @@ export const products: Product[] = [
       "Built-in Plagiarism Checker",
       "Fast & Responsive"
     ],
-    "image": "https://images.unsplash.com/photo-1456324504439-367cee3b3c32?auto=format&fit=crop&w=400&h=240",
+    "image": "https://logo.clearbit.com/rytr.me",
     "plans": [
       {
         "type": "Shared Account",
@@ -791,7 +791,7 @@ export const products: Product[] = [
       "Blog-to-Video",
       "Huge Stock Media Library"
     ],
-    "image": "https://images.unsplash.com/photo-1574717024632-11b3b7872998?auto=format&fit=crop&w=400&h=240",
+    "image": "https://logo.clearbit.com/pictory.ai",
     "plans": [
       {
         "type": "Shared Account",
@@ -823,7 +823,7 @@ export const products: Product[] = [
       "Stock Video Footage",
       "Shared Access"
     ],
-    "image": "https://images.unsplash.com/photo-1554188248-986adbb73373?auto=format&fit=crop&w=400&h=240",
+    "image": "https://logo.clearbit.com/shutterstock.com",
     "plans": [
       {
         "type": "Shared Account",
@@ -855,7 +855,7 @@ export const products: Product[] = [
       "Stock Videos & Photos",
       "Templates & Fonts"
     ],
-    "image": "https://images.unsplash.com/photo-1596593545365-17c2b530d9b4?auto=format&fit=crop&w=400&h=240",
+    "image": "https://logo.clearbit.com/envato.com",
     "plans": [
       {
         "type": "Shared Account",
@@ -887,7 +887,7 @@ export const products: Product[] = [
       "Ideal for Concept Art & Design",
       "Private Account Access"
     ],
-    "image": "https://images.unsplash.com/photo-1679083216922-225389a191a6?auto=format&fit=crop&w=400&h=240",
+    "image": "https://logo.clearbit.com/midjourney.com",
     "plans": [
       {
         "type": "Basic Plan",
@@ -918,7 +918,7 @@ export const products: Product[] = [
       "Secure Encryption",
       "For 1 Device"
     ],
-    "image": "https://images.unsplash.com/photo-1621253026601-5b723f113794?auto=format&fit=crop&w=400&h=240",
+    "image": "https://logo.clearbit.com/nordvpn.com",
     "plans": [
       {
         "type": "Shared Account",
@@ -949,7 +949,7 @@ export const products: Product[] = [
       "99.9% Uptime",
       "For 1 Device"
     ],
-    "image": "https://images.unsplash.com/photo-1614036750348-add95a9f4544?auto=format&fit=crop&w=400&h=240",
+    "image": "https://logo.clearbit.com/expressvpn.com",
     "plans": [
       {
         "type": "Shared Account",
@@ -980,7 +980,7 @@ export const products: Product[] = [
       "Strict No-Logs Policy",
       "For 1 Device"
     ],
-    "image": "https://images.unsplash.com/photo-1550751827-413375b4269d?auto=format&fit=crop&w=400&h=240",
+    "image": "https://logo.clearbit.com/surfshark.com",
     "plans": [
       {
         "type": "Shared Account",
@@ -1011,7 +1011,7 @@ export const products: Product[] = [
       "Strong No-Logs Policy",
       "For 1 Device"
     ],
-    "image": "https://images.unsplash.com/photo-1558008439-d96a090f9a2d?auto=format&fit=crop&w=400&h=240",
+    "image": "https://logo.clearbit.com/cyberghostvpn.com",
     "plans": [
       {
         "type": "Shared Account",
@@ -1042,7 +1042,7 @@ export const products: Product[] = [
       "Advanced Encryption",
       "For 1 Device"
     ],
-    "image": "https://images.unsplash.com/photo-1605810230464-47c1b6271295?auto=format&fit=crop&w=400&h=240",
+    "image": "https://logo.clearbit.com/ipvanish.com",
     "plans": [
       {
         "type": "Shared Account",
@@ -1073,7 +1073,7 @@ export const products: Product[] = [
       "4K Streaming Support",
       "For 1 Device"
     ],
-    "image": "https://images.unsplash.com/photo-1487017159836-4e23ece2e4cf?auto=format&fit=crop&w=400&h=240",
+    "image": "https://logo.clearbit.com/hotspotshield.com",
     "plans": [
       {
         "type": "Shared Account",
@@ -1104,7 +1104,7 @@ export const products: Product[] = [
       "Port Forwarding Support",
       "For 1 Device"
     ],
-    "image": "https://images.unsplash.com/photo-1526374965328-5f61d48c093c?auto=format&fit=crop&w=400&h=240",
+    "image": "https://logo.clearbit.com/purevpn.com",
     "plans": [
       {
         "type": "Shared Account",
@@ -1136,7 +1136,7 @@ export const products: Product[] = [
       "Exclusive Discounts",
       "Cloud Storage"
     ],
-    "image": "https://images.unsplash.com/photo-1585857242562-85a203f9b09a?auto=format&fit=crop&w=400&h=240",
+    "image": "https://logo.clearbit.com/playstation.com",
     "plans": [
       {
         "type": "Essential",
@@ -1220,7 +1220,7 @@ export const products: Product[] = [
       "25-Day Replacement Warranty",
       "Emulator Support Available"
     ],
-    "image": "https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?auto=format&fit=crop&w=400&h=240",
+    "image": "https://logo.clearbit.com/microsoft.com",
     "plans": [
       {
         "type": "2 Core / 4GB RAM",
@@ -1274,7 +1274,7 @@ export const products: Product[] = [
       "Receive International Calls & SMS",
       "Business Verification"
     ],
-    "image": "https://images.unsplash.com/photo-1614332287897-f3743ff00219?auto=format&fit=crop&w=400&h=240",
+    "image": "https://logo.clearbit.com/ee.co.uk",
     "plans": [
       {
         "type": "Physical SIM",
@@ -1306,7 +1306,7 @@ export const products: Product[] = [
       "See Who Viewed Your Profile",
       "Access to LinkedIn Learning"
     ],
-    "image": "https://images.unsplash.com/photo-1611944212129-29955ae40213?auto=format&fit=crop&w=400&h=240",
+    "image": "https://logo.clearbit.com/linkedin.com",
     "plans": [
       {
         "type": "Sales Navigator Advance",
@@ -1349,7 +1349,7 @@ export const products: Product[] = [
       "5TB OneDrive Storage",
       "Use on 5 Devices"
     ],
-    "image": "https://images.unsplash.com/photo-1603969238814-716395b0e852?auto=format&fit=crop&w=400&h=240",
+    "image": "https://logo.clearbit.com/microsoft.com",
     "plans": [
       {
         "type": "Lifetime Account",
@@ -1381,7 +1381,7 @@ export const products: Product[] = [
       "For 1 PC",
       "Windows 10 Pro or 11 Pro"
     ],
-    "image": "https://images.unsplash.com/photo-1618335438217-7a2b0a1d85a0?auto=format&fit=crop&w=400&h=240",
+    "image": "https://logo.clearbit.com/microsoft.com",
     "plans": [
       {
         "type": "OEM License Key",
@@ -1413,7 +1413,7 @@ export const products: Product[] = [
       "Fast Delivery",
       "Non-Drop Guarantees Available"
     ],
-    "image": "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=400&h=240",
+    "image": "https://logo.clearbit.com/facebook.com",
     "popular": true,
     "plans": [
       {

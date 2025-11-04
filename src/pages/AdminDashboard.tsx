@@ -97,8 +97,8 @@ const AdminDashboard: React.FC = () => {
   // Site Settings
   const [siteSettings, setSiteSettings] = useState({
     siteName: 'King Subscription',
-    tagline: 'Premium AI & SEO Tools at 50% OFF',
-    metaDescription: 'Get premium AI & SEO tools at 50% OFF! ChatGPT Plus, Canva Pro, Adobe Creative Suite & 15+ tools. Instant access, 24/7 support.',
+  tagline: 'Premium AI & SEO Tools at Huge Discounts',
+  metaDescription: 'Get premium AI & SEO tools at Huge Discounts! ChatGPT Plus, Canva Pro, Adobe Creative Suite & 15+ tools. Instant access, 24/7 support.',
     enablePurchaseNotifications: settings.enablePurchaseNotifications,
     enableFloatingCart: settings.enableFloatingCart,
     enablePopups: true,
@@ -810,7 +810,7 @@ const AdminDashboard: React.FC = () => {
                     id="seo-title"
                     value={seoDraft.title}
                     onChange={(event) => handleSeoInputChange('title', event.target.value)}
-                    placeholder="Kings Subscriptions - Premium Tools at 50% Off"
+                    placeholder="Kings Subscriptions - Premium Tools at Huge Discounts"
                   />
                   <p className="text-xs text-muted-foreground">Keep titles under 60 characters for best results.</p>
                 </div>

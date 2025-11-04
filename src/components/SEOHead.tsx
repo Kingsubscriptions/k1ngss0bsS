@@ -68,7 +68,7 @@ const SEOHead: React.FC<SEOHeadProps> = ({
 
     // Open Graph meta tags
     setMetaTag('og:title', title || siteName, true);
-    setMetaTag('og:description', description || 'Premium AI & SEO tools at 50% off', true);
+  setMetaTag('og:description', description || 'Premium Subscriptions at Discounted and Reasonable Prices', true);
     setMetaTag('og:image', image.startsWith('http') ? image : `${window.location.origin}${image}`, true);
     setMetaTag('og:url', currentUrl, true);
     setMetaTag('og:type', type, true);
@@ -77,7 +77,7 @@ const SEOHead: React.FC<SEOHeadProps> = ({
     // Twitter Card meta tags
     setMetaTag('twitter:card', 'summary_large_image', true);
     setMetaTag('twitter:title', title || siteName, true);
-    setMetaTag('twitter:description', description || 'Premium AI & SEO tools at 50% off', true);
+  setMetaTag('twitter:description', description || 'Premium Subscriptions at Discounted and Reasonable Prices', true);
     setMetaTag('twitter:image', image.startsWith('http') ? image : `${window.location.origin}${image}`, true);
     setMetaTag('twitter:site', twitterHandle, true);
 
@@ -121,7 +121,7 @@ const SEOHead: React.FC<SEOHeadProps> = ({
       '@context': 'https://schema.org',
       '@type': type === 'website' ? 'WebSite' : type === 'article' ? 'Article' : 'Product',
       name: title || siteName,
-      description: description || 'Premium AI & SEO tools at 50% off',
+  description: description || 'Premium Subscriptions at Discounted and Reasonable Prices',
       url: currentUrl,
       image: image.startsWith('http') ? image : `${window.location.origin}${image}`,
       publisher: {

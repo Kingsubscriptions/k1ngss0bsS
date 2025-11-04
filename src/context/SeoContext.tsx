@@ -34,8 +34,8 @@ interface SeoContextValue {
 
 const defaultSeo: Record<SeoPageKey, PageSeo> = {
   home: {
-    title: 'Kings Subscriptions - Premium Digital Products',
-    description: 'Get ChatGPT Plus, Canva Pro, Adobe Suite & 15+ premium tools at 50% off with instant delivery and 24/7 support.',
+    title: 'Kings Subscriptions - Premium Digital Subscriptions & Services',
+  description: 'Get ChatGPT Plus, Canva Pro, Adobe Suite & 15+ premium tools at Huge Discounts with instant delivery and 24/7 support.',
     keywords: 'chatgpt plus discount, canva pro cheap, adobe creative cloud deal',
   },
   tools: {

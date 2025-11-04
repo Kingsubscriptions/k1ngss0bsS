@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { Product } from "@/data/products";
 import { useProductsContext } from "@/context/ProductsContext";
 import ProductCardSimple from "@/components/ProductCard";
@@ -12,7 +12,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function AllProducts() {
   const { products } = useProductsContext();
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
   const isMobile = useIsMobile();
   useSeo('products');
   
@@ -43,7 +43,9 @@ export default function AllProducts() {
             : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
         )}>
           {products.map((p) => (
-            <ProductCardSimple key={p.id} product={p as Product} viewMode={viewMode} />
+            <div key={p.id}>
+              <ProductCardSimple product={p as Product} viewMode={viewMode} />
+            </div>
           ))}
         </div>
       </div>

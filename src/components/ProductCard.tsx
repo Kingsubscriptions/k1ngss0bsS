@@ -314,16 +314,16 @@ Please send me payment details. Thank you!`;
           <div className="flex items-center p-2 gap-3">
             {/* Small Image on Left */}
             <div className="relative flex-shrink-0 w-16 h-12 rounded-md overflow-hidden bg-muted/40">
-              <img
-                src={imgError ? '/placeholder-image.jpg' : imageSrc}
-                alt={product.name}
-                className="w-full h-full object-contain"
-                loading="lazy"
-                width="64"
-                height="48"
-                onLoad={() => setImgLoading(false)}
-                onError={() => setImgError(true)}
-              />
+                <img
+                  src={imgError ? '/placeholder-image.jpg' : imageSrc}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                  width="64"
+                  height="48"
+                  onLoad={() => setImgLoading(false)}
+                  onError={() => setImgError(true)}
+                />
             </div>
 
             {/* Product Info - Center */}
@@ -391,19 +391,19 @@ Please send me payment details. Thank you!`;
               "w-full relative rounded-md overflow-hidden bg-muted",
               isMobile ? "aspect-[4/3] max-h-[100px]" : "aspect-square sm:aspect-[3/2]"
             )}>
-              <img
-                src={imgError ? "/placeholder-image.jpg" : imageSrc}
-                alt={product.name}
-                className={cn(
-                  "object-contain w-full h-full transition-transform duration-300 group-hover:scale-105",
-                  imgLoading ? 'blur-sm' : 'blur-0'
-                )}
-                loading="lazy"
-                width={isMobile ? "100" : undefined}
-                height={isMobile ? "75" : undefined}
-                onLoad={() => setImgLoading(false)}
-                onError={() => setImgError(true)}
-              />
+                <img
+                  src={imgError ? "/placeholder-image.jpg" : imageSrc}
+                  alt={product.name}
+                  className={cn(
+                    "object-cover w-full h-full transition-transform duration-300 group-hover:scale-105",
+                    imgLoading ? 'blur-sm' : 'blur-0'
+                  )}
+                  loading="lazy"
+                  width={isMobile ? "100" : undefined}
+                  height={isMobile ? "75" : undefined}
+                  onLoad={() => setImgLoading(false)}
+                  onError={() => setImgError(true)}
+                />
             </div>
             
             {/* Product Badge */}

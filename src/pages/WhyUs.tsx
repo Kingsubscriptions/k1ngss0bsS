@@ -22,6 +22,43 @@ import WhatsAppButton from '@/components/WhatsAppButton';
 
 const WhyUs: React.FC = () => {
   const { formatPrice } = useCurrency();
+  // Import products data
+  const productsData = require('@/data/products').products;
+
+  // Map of product IDs to display in table
+  const comparisonProducts = [
+    { id: 'chatgpt-plus', name: 'ChatGPT Plus', duration: 'monthly' },
+    { id: 'adobe-creative-cloud', name: 'Adobe Creative Cloud', duration: 'monthly' },
+    { id: 'canva-pro', name: 'Canva Pro', duration: 'yearly' },
+    { id: 'semrush-pro', name: 'SEMrush Pro', duration: 'monthly' },
+  ];
+
+  // Helper to get product price
+  function getProductPrice(id, duration) {
+    const prod = productsData.find(p => p.id === id);
+    if (!prod || !prod.price) return { king: '-', retail: '-' };
+    const king = prod.price[duration] || '-';
+    const retail = prod.price.original || '-';
+    return { king, retail };
+  }
+
+  // Calculate total annual savings
+  let totalKing = 0, totalRetail = 0;
+  comparisonProducts.forEach(({ id, duration }) => {
+    const prod = productsData.find(p => p.id === id);
+    if (prod && prod.price) {
+      const king = prod.price[duration] || 0;
+      const retail = prod.price.original || 0;
+      // If yearly, count once; if monthly, multiply by 12
+      if (duration === 'yearly') {
+        totalKing += king;
+        totalRetail += retail;
+      } else {
+        totalKing += king * 12;
+        totalRetail += retail * 12;
+      }
+    }
+  });
 
   return (
     <div className="min-h-screen py-12">
@@ -38,7 +75,7 @@ const WhyUs: React.FC = () => {
             Here's why we're different from everyone else.
           </p>
           <Badge variant="destructive" className="text-lg px-6 py-2 animate-pulse">
-            🔥 50% OFF Everything - Limited Time
+            🔥 Huge Discounts on Everything - Limited Time
           </Badge>
         </div>
 
@@ -60,49 +97,30 @@ const WhyUs: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody className="space-y-4">
-                  <tr className="border-b">
-                    <td className="py-4 font-medium">ChatGPT Plus</td>
-                    <td className="py-4 text-center">
-                      <span className="text-green-600 font-bold text-xl">{formatPrice(20)}/month</span>
-                    </td>
-                    <td className="py-4 text-center">
-                      <span className="text-red-600 font-bold text-xl line-through">{formatPrice(40)}/month</span>
-                    </td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="py-4 font-medium">Adobe Creative Cloud</td>
-                    <td className="py-4 text-center">
-                      <span className="text-green-600 font-bold text-xl">{formatPrice(52.99)}/month</span>
-                    </td>
-                    <td className="py-4 text-center">
-                      <span className="text-red-600 font-bold text-xl line-through">{formatPrice(105.99)}/month</span>
-                    </td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="py-4 font-medium">Canva Pro</td>
-                    <td className="py-4 text-center">
-                      <span className="text-green-600 font-bold text-xl">{formatPrice(119.99)}/year</span>
-                    </td>
-                    <td className="py-4 text-center">
-                      <span className="text-red-600 font-bold text-xl line-through">{formatPrice(239.99)}/year</span>
-                    </td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="py-4 font-medium">SEMrush Pro</td>
-                    <td className="py-4 text-center">
-                      <span className="text-green-600 font-bold text-xl">{formatPrice(99.95)}/month</span>
-                    </td>
-                    <td className="py-4 text-center">
-                      <span className="text-red-600 font-bold text-xl line-through">{formatPrice(199.95)}/month</span>
-                    </td>
-                  </tr>
+                  {comparisonProducts.map(({ id, name, duration }) => {
+                    const prod = productsData.find(p => p.id === id);
+                    if (!prod) return null;
+                    const king = prod.price[duration] || '-';
+                    const retail = prod.price.original || '-';
+                    return (
+                      <tr className="border-b" key={id}>
+                        <td className="py-4 font-medium">{name}</td>
+                        <td className="py-4 text-center">
+                          <span className="text-green-600 font-bold text-xl">{king !== '-' ? formatPrice(king) : '-'}/{duration}</span>
+                        </td>
+                        <td className="py-4 text-center">
+                          <span className="text-red-600 font-bold text-xl line-through">{retail !== '-' ? formatPrice(retail) : '-'}/{duration}</span>
+                        </td>
+                      </tr>
+                    );
+                  })}
                   <tr className="bg-green-50 dark:bg-green-950/20">
                     <td className="py-4 font-bold text-lg">Total Annual Savings</td>
                     <td className="py-4 text-center">
-                      <span className="text-green-600 font-bold text-2xl">{formatPrice(1200)}+ SAVED</span>
+                      <span className="text-green-600 font-bold text-2xl">{formatPrice(totalRetail - totalKing)}+ SAVED</span>
                     </td>
                     <td className="py-4 text-center">
-                      <span className="text-red-600 font-bold text-xl">{formatPrice(2400)}+ WASTED</span>
+                      <span className="text-red-600 font-bold text-xl">{formatPrice(totalRetail)}+ WASTED</span>
                     </td>
                   </tr>
                 </tbody>
@@ -298,12 +316,12 @@ const WhyUs: React.FC = () => {
             </h2>
             <p className="text-xl mb-6 opacity-90 max-w-3xl mx-auto">
               Join 10,000+ smart entrepreneurs who refuse to pay full price. 
-              Get premium tools at 50% OFF with instant access and lifetime support.
+              Get premium tools at Huge Discounts with instant access and lifetime support.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
               <Link to="/tools">
                 <Button size="lg" className="bg-white text-green-600 hover:bg-gray-100 px-8 py-6 text-xl font-bold">
-                  🚀 Get 50% OFF Now
+                  🚀 Get Huge Discounts Now
                 </Button>
               </Link>
               <WhatsAppButton 

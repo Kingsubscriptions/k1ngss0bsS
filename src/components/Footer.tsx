@@ -22,7 +22,7 @@ const Footer: React.FC = () => {
               <span className="text-lg font-bold">King Subscription</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              Get premium AI & SEO tools at 50% OFF. Trusted by 10,000+ entrepreneurs worldwide.
+              Get Premium Subscriptions in affordable pricing. Trusted by 10,000+ Professionals worldwide.
             </p>
             <div className="flex items-center space-x-1">
               {[...Array(5)].map((_, i) => (

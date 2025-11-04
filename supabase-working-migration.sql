@@ -45,9 +45,11 @@ CREATE TABLE public.products (
     features TEXT DEFAULT '[]',
     image TEXT,
     popular BOOLEAN DEFAULT false,
+    
     badge TEXT,
     price TEXT DEFAULT '{}',
     stock TEXT DEFAULT 'false',
+    plans JSONB DEFAULT '[]',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

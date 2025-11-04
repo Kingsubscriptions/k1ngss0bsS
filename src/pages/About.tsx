@@ -198,7 +198,7 @@ const About: React.FC = () => {
           <CardContent className="p-8">
             <h2 className="text-3xl font-bold mb-4">Ready to Join 10,000+ Smart Entrepreneurs?</h2>
             <p className="text-xl mb-6 opacity-90">
-              Stop overpaying for software. Get premium tools at 50% OFF and start saving today.
+              Stop overpaying for software. Get premium tools at Huge Discounts and start saving today.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/tools">

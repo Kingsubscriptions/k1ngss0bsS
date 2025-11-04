@@ -107,19 +107,19 @@ const Home: React.FC = () => {
             <CountdownTimer />
             <h1 className="text-4xl md:text-7xl font-black mb-6 leading-tight">
               <span className="bg-gradient-to-r from-amber-500 to-orange-600 bg-clip-text text-transparent">
-                STOP BLEEDING MONEY
+                STOP SPENDING MONEY
               </span>
               <br />
               <span className="text-foreground">
-                On Overpriced Software!
+                On Overpriced Softwares & Services!
               </span>
             </h1>
             <div className="text-xl md:text-2xl mb-8 text-muted-foreground max-w-4xl mx-auto">
               <p className="mb-4">
-                🔥 <strong>10,000+ Smart Entrepreneurs</strong> have already ditched expensive subscriptions...
+                🔥 <strong>10,000+ Professionals</strong> have already canceled their expensive subscription and Now they buy those subs from us at affordable prices.
               </p>
               <p className="text-lg">
-                Get <span className="text-green-600 font-bold">ChatGPT Plus, Canva Pro, Adobe Creative Suite</span> and 15+ premium tools at <span className="bg-yellow-200 dark:bg-yellow-800 px-2 py-1 rounded font-bold">50% OFF</span>
+                <span className="text-green-600 font-bold">ChatGPT Plus, Canva Pro, Adobe Creative Suite</span> and {products.length}+ premium tools are available at <span className="bg-yellow-200 dark:bg-yellow-800 px-2 py-1 rounded font-bold">Huge Discounts</span>
               </p>
             </div>
             <div className="flex items-center justify-center gap-6 mb-8 flex-wrap">
@@ -144,7 +144,7 @@ const Home: React.FC = () => {
                 </Button>
               </Link>
               <WhatsAppButton 
-                message="Hi! I want to save 50% on premium tools. Can you help me get started?"
+                message="Hi! I want to save money on premium tools. Can you help me get started?"
                 variant="outline"
                 className="px-8 py-6 text-lg border-green-600 text-green-600 hover:bg-green-50 dark:hover:bg-green-900 dark:hover:text-green-100" // Fixed dark mode visibility
                 text="ORDER VIA WHATSAPP"
@@ -167,7 +167,7 @@ const Home: React.FC = () => {
                 </span>
               </h2>
               <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-4xl mx-auto">
-                The <strong>ONLY</strong> platform where successful entrepreneurs get premium tools at <span className="text-green-600 font-bold">50% OFF</span> without compromising on quality or features.
+                The <strong>ONLY</strong> platform where you can get premium tools at <span className="text-green-600 font-bold">reasonalble and affordable rates</span> without compromising on quality or features.
               </p>
             </div>
             <div className="grid md:grid-cols-3 gap-6 md:gap-8 mb-12 md:mb-16">
@@ -178,7 +178,7 @@ const Home: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground mb-4">
-                    Why pay full price when smart entrepreneurs get the same tools for half the cost?
+                    Why pay full price when you can get the same tools for half the cost?
                   </p>
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-center">
