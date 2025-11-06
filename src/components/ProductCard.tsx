@@ -6,13 +6,13 @@ import { Dialog, DialogContent, DialogHeader, DialogFooter } from "@/components/
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { cn } from '@/lib/utils';
-import { 
-  ShieldCheck, 
-  Star, 
-  CheckCircle, 
-  ShoppingCart, 
-  Tag, 
-  Zap, 
+import {
+  ShieldCheck,
+  Star,
+  CheckCircle,
+  ShoppingCart,
+  Tag,
+  Zap,
   AlertCircle,
   Clock,
   Users,
@@ -27,6 +27,7 @@ import { useCart } from "@/context/CartContext";
 import { useSettings } from '@/context/SettingsContext';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { getProductImage, getStockLabel, isProductInStock } from "@/data/products";
+import OptimizedImage from "@/components/OptimizedImage";
 
 /* ---------- Helper Functions & Hooks ---------- */
 function safeNum(v: unknown): number {
@@ -95,6 +96,7 @@ type AnyProduct = {
   name: string;
   category: string;
   image?: string;
+  images?: string[];
   features?: string[];
   rating?: number;
   price?: { monthly?: number; yearly?: number; original?: number };
@@ -314,13 +316,13 @@ Please send me payment details. Thank you!`;
           <div className="flex items-center p-2 gap-3">
             {/* Small Image on Left */}
             <div className="relative flex-shrink-0 w-16 h-12 rounded-md overflow-hidden bg-muted/40">
-                <img
-                  src={imgError ? '/placeholder-image.jpg' : imageSrc}
+                <OptimizedImage
+                  src={imageSrc}
                   alt={product.name}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                  width="64"
-                  height="48"
+                  width={64}
+                  height={48}
+                  className="w-full h-full"
+                  placeholder="/placeholder-image.jpg"
                   onLoad={() => setImgLoading(false)}
                   onError={() => setImgError(true)}
                 />
@@ -387,20 +389,20 @@ Please send me payment details. Thank you!`;
         <CardContent className={cn("flex flex-col flex-1", isMobile ? "p-3" : "p-4")}>
           {/* Image Area - Smaller on Mobile */}
           <div className="relative mb-3">
-            <div className={cn(
+<div className={cn(
               "w-full relative rounded-md overflow-hidden bg-muted",
               isMobile ? "aspect-[4/3] max-h-[100px]" : "aspect-square sm:aspect-[3/2]"
             )}>
-                <img
-                  src={imgError ? "/placeholder-image.jpg" : imageSrc}
+                <OptimizedImage
+                  src={product.images?.[0] || imageSrc}
                   alt={product.name}
+                  width={isMobile ? 200 : 600}
+                  height={isMobile ? 150 : 450}
                   className={cn(
                     "object-cover w-full h-full transition-transform duration-300 group-hover:scale-105",
                     imgLoading ? 'blur-sm' : 'blur-0'
                   )}
-                  loading="lazy"
-                  width={isMobile ? "100" : undefined}
-                  height={isMobile ? "75" : undefined}
+                  placeholder="/placeholder-image.jpg"
                   onLoad={() => setImgLoading(false)}
                   onError={() => setImgError(true)}
                 />

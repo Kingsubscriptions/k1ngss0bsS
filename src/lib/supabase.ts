@@ -651,3 +651,151 @@ export class PopupSettingsService {
     }
   }
 }
+
+// Custom Pages Service
+export interface CustomPage {
+  id: string
+  slug: string
+  title: string
+  content: string
+  metaTitle?: string
+  metaDescription?: string
+  published: boolean
+  created_at?: string
+  updated_at?: string
+}
+
+export class CustomPagesService {
+  private static readonly TABLE_NAME = 'custom_pages'
+
+  static async getPages(): Promise<CustomPage[]> {
+    try {
+      const { data, error } = await supabase
+        .from(this.TABLE_NAME)
+        .select('*')
+        .order('created_at', { ascending: false })
+
+      if (error) {
+        console.error('Error fetching custom pages:', error)
+        return []
+      }
+
+      return data || []
+    } catch (error) {
+      console.error('Error in getPages:', error)
+      return []
+    }
+  }
+
+  static async addPage(page: Omit<CustomPage, 'id' | 'created_at' | 'updated_at'>): Promise<boolean> {
+    try {
+      const pageToInsert = {
+        ...page,
+        id: `page_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }
+
+      const { error } = await supabase
+        .from(this.TABLE_NAME)
+        .insert([pageToInsert])
+
+      if (error) {
+        console.error('Error adding custom page:', error)
+        return false
+      }
+
+      return true
+    } catch (error) {
+      console.error('Error in addPage:', error)
+      return false
+    }
+  }
+
+  static async updatePage(page: CustomPage): Promise<boolean> {
+    try {
+      const pageToUpdate = {
+        ...page,
+        updated_at: new Date().toISOString()
+      }
+
+      const { error } = await supabase
+        .from(this.TABLE_NAME)
+        .update(pageToUpdate)
+        .eq('id', page.id)
+
+      if (error) {
+        console.error('Error updating custom page:', error)
+        return false
+      }
+
+      return true
+    } catch (error) {
+      console.error('Error in updatePage:', error)
+      return false
+    }
+  }
+
+  static async deletePage(pageId: string): Promise<boolean> {
+    try {
+      const { error } = await supabase
+        .from(this.TABLE_NAME)
+        .delete()
+        .eq('id', pageId)
+
+      if (error) {
+        console.error('Error deleting custom page:', error)
+        return false
+      }
+
+      return true
+    } catch (error) {
+      console.error('Error in deletePage:', error)
+      return false
+    }
+  }
+
+  static async getPageBySlug(slug: string): Promise<CustomPage | null> {
+    try {
+      const { data, error } = await supabase
+        .from(this.TABLE_NAME)
+        .select('*')
+        .eq('slug', slug)
+        .eq('published', true)
+        .single()
+
+      if (error && error.code !== 'PGRST116') {
+        console.error('Error fetching page by slug:', error)
+        return null
+      }
+
+      return data
+    } catch (error) {
+      console.error('Error in getPageBySlug:', error)
+      return null
+    }
+  }
+
+  static subscribeToChanges(callback: (pages: CustomPage[]) => void) {
+    const subscription = supabase
+      .channel('custom_pages_changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: this.TABLE_NAME
+        },
+        async (payload) => {
+          console.log('🔄 Custom pages changed in database:', payload)
+          const pages = await this.getPages()
+          callback(pages)
+        }
+      )
+      .subscribe()
+
+    return () => {
+      subscription.unsubscribe()
+    }
+  }
+}

@@ -2,12 +2,12 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { 
-  DollarSign, 
-  Clock, 
-  Shield, 
-  Star, 
-  CheckCircle, 
+import {
+  DollarSign,
+  Clock,
+  Shield,
+  Star,
+  CheckCircle,
   X,
   TrendingUp,
   Users,
@@ -19,11 +19,10 @@ import {
 import { Link } from 'react-router-dom';
 import { useCurrency } from '@/context/CurrencyContext';
 import WhatsAppButton from '@/components/WhatsAppButton';
+import { products } from '@/data/products';
 
 const WhyUs: React.FC = () => {
   const { formatPrice } = useCurrency();
-  // Import products data
-  const productsData = require('@/data/products').products;
 
   // Map of product IDs to display in table
   const comparisonProducts = [
@@ -35,7 +34,7 @@ const WhyUs: React.FC = () => {
 
   // Helper to get product price
   function getProductPrice(id, duration) {
-    const prod = productsData.find(p => p.id === id);
+    const prod = products.find(p => p.id === id);
     if (!prod || !prod.price) return { king: '-', retail: '-' };
     const king = prod.price[duration] || '-';
     const retail = prod.price.original || '-';
@@ -45,7 +44,7 @@ const WhyUs: React.FC = () => {
   // Calculate total annual savings
   let totalKing = 0, totalRetail = 0;
   comparisonProducts.forEach(({ id, duration }) => {
-    const prod = productsData.find(p => p.id === id);
+    const prod = products.find(p => p.id === id);
     if (prod && prod.price) {
       const king = prod.price[duration] || 0;
       const retail = prod.price.original || 0;
@@ -98,7 +97,7 @@ const WhyUs: React.FC = () => {
                 </thead>
                 <tbody className="space-y-4">
                   {comparisonProducts.map(({ id, name, duration }) => {
-                    const prod = productsData.find(p => p.id === id);
+                    const prod = products.find(p => p.id === id);
                     if (!prod) return null;
                     const king = prod.price[duration] || '-';
                     const retail = prod.price.original || '-';

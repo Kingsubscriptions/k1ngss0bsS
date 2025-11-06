@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useNavigate } from 'react-router-dom';
-import { Crown, Lock, User } from 'lucide-react';
+import { Lock, User } from 'lucide-react';
 
 /**
  * Admin login page. For demo purposes, uses simple credentials.
@@ -20,12 +20,30 @@ const Admin: React.FC = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
+    // Password policy validation
+    const passwordPolicy = {
+      minLength: 12,
+      requireUppercase: true,
+      requireLowercase: true,
+      requireNumbers: true,
+      requireSpecialChars: true
+    };
+
+    const validatePassword = (password: string) => {
+      if (password.length < passwordPolicy.minLength) return false;
+      if (passwordPolicy.requireUppercase && !/[A-Z]/.test(password)) return false;
+      if (passwordPolicy.requireLowercase && !/[a-z]/.test(password)) return false;
+      if (passwordPolicy.requireNumbers && !/\d/.test(password)) return false;
+      if (passwordPolicy.requireSpecialChars && !/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) return false;
+      return true;
+    };
+
     // Demo credentials - in production, this should be secure authentication
-    if (credentials.username === 'admin' && credentials.password === 'admin123') {
+    if (credentials.username === 'kingsubs_admin' && credentials.password === 'KingSubs@2025!Secure') {
       navigate('/admin/dashboard');
     } else {
-      setError('Invalid credentials. Try admin/admin123');
+      setError('Invalid credentials. Try kingsubs_admin/KingSubs@2025!Secure');
     }
   };
 
@@ -34,7 +52,9 @@ const Admin: React.FC = () => {
       <Card className="max-w-md w-full">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
-            <Crown className="h-12 w-12 text-primary" />
+            <h1 className="text-3xl font-bold text-primary tracking-wide">
+              King Subscription
+            </h1>
           </div>
           <CardTitle className="text-2xl font-bold">Admin Login</CardTitle>
           <p className="text-muted-foreground">Access the King Subscription dashboard</p>
@@ -82,14 +102,6 @@ const Admin: React.FC = () => {
               Login to Dashboard
             </Button>
           </form>
-          
-          <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
-            <h4 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">Demo Credentials:</h4>
-            <p className="text-sm text-blue-700 dark:text-blue-300">
-              Username: <code className="bg-blue-100 dark:bg-blue-900 px-1 rounded">admin</code><br/>
-              Password: <code className="bg-blue-100 dark:bg-blue-900 px-1 rounded">admin123</code>
-            </p>
-          </div>
         </CardContent>
       </Card>
     </div>

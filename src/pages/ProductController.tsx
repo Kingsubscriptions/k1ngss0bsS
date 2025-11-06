@@ -17,7 +17,7 @@ const LoginForm: React.FC<LoginProps> = ({ onLogin }) => {
   const [isLoading, setIsLoading] = useState(false);
   
   // Use environment variable for password in production
-  const ADMIN_PASSWORD = import.meta.env.VITE_PRODUCT_CONTROLLER_PASSWORD || 'KingSubsAdmin2025!';
+  const ADMIN_PASSWORD = import.meta.env.VITE_PRODUCT_CONTROLLER_PASSWORD || 'admin123';
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -10,12 +10,12 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { 
-  Settings, 
-  Package, 
-  Users, 
-  MessageSquare, 
-  Globe, 
+import {
+  Settings,
+  Package,
+  Users,
+  MessageSquare,
+  Globe,
   DollarSign,
   Plus,
   Edit,
@@ -29,13 +29,21 @@ import {
   Crown,
   BookOpen,
   FilePlus2,
-  Clock
+  Clock,
+  LogOut
 } from 'lucide-react';
 import { useProductsContext } from '@/context/ProductsContext';
 import { useSettings } from '@/context/SettingsContext';
 import { useBlogContext } from '@/context/BlogContext';
 import { usePopup, POPUP_PAGE_OPTIONS, type PopupSettings } from '@/context/PopupContext';
 import { useSeoContext, type PageSeo, type SeoPageKey } from '@/context/SeoContext';
+import { useAuth } from '@/context/AuthContext';
+import { useCustomPages, type CustomPage } from '@/context/CustomPagesContext';
+import { useHero } from '@/context/HeroContext';
+import { useSiteSettings } from '@/context/SiteSettingsContext';
+import { useAdminSettings } from '@/context/AdminSettingsContext';
+import { useStaticPages } from '@/context/StaticPagesContext';
+import StaticPagesEditor from '@/components/StaticPagesEditor';
 
 type BlogFormState = {
   title: string;
@@ -62,6 +70,7 @@ const formatBlogDate = (value?: string) => {
 };
 
 const AdminDashboard: React.FC = () => {
+  const { logout } = useAuth();
   const { settings, updateSettings, isLoading: settingsLoading, error: settingsError } = useSettings();
   const { products } = useProductsContext();
   const { posts: blogPosts, createPost, updatePost, deletePost, togglePublished, categories: blogCategories } = useBlogContext();
@@ -85,40 +94,149 @@ const AdminDashboard: React.FC = () => {
   const [editingBlogSlug, setEditingBlogSlug] = useState<string | null>(null);
   const [blogMessage, setBlogMessage] = useState('');
 
+  // Custom Pages state
+  const { pages: customPages, addPage, updatePage, deletePage } = useCustomPages();
+  const [pageForm, setPageForm] = useState({
+    title: '',
+    slug: '',
+    content: '',
+    metaTitle: '',
+    metaDescription: '',
+    published: false,
+  });
+  const [editingPageId, setEditingPageId] = useState<string | null>(null);
+  const [pageMessage, setPageMessage] = useState('');
+
+  // Custom Pages handlers
+  const handleResetPageForm = () => {
+    setEditingPageId(null);
+    setPageForm({
+      title: '',
+      slug: '',
+      content: '',
+      metaTitle: '',
+      metaDescription: '',
+      published: false,
+    });
+    setPageMessage('');
+  };
+
+  const handleEditPage = (page: CustomPage) => {
+    setEditingPageId(page.id);
+    setPageForm({
+      title: page.title,
+      slug: page.slug,
+      content: page.content,
+      metaTitle: page.metaTitle || '',
+      metaDescription: page.metaDescription || '',
+      published: page.published,
+    });
+    setPageMessage('');
+  };
+
+  const handlePageSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!pageForm.title.trim()) {
+      setPageMessage('Title is required.');
+      return;
+    }
+    if (!pageForm.slug.trim()) {
+      setPageMessage('Slug is required.');
+      return;
+    }
+    if (!pageForm.content.trim()) {
+      setPageMessage('Content is required.');
+      return;
+    }
+
+    try {
+      if (editingPageId) {
+        const success = await updatePage({
+          id: editingPageId,
+          title: pageForm.title.trim(),
+          slug: pageForm.slug.trim(),
+          content: pageForm.content.trim(),
+          metaTitle: pageForm.metaTitle.trim() || undefined,
+          metaDescription: pageForm.metaDescription.trim() || undefined,
+          published: pageForm.published,
+        });
+        if (success) {
+          setPageMessage('Page updated successfully.');
+        } else {
+          setPageMessage('Failed to update page.');
+        }
+      } else {
+        const success = await addPage({
+          title: pageForm.title.trim(),
+          slug: pageForm.slug.trim(),
+          content: pageForm.content.trim(),
+          metaTitle: pageForm.metaTitle.trim() || undefined,
+          metaDescription: pageForm.metaDescription.trim() || undefined,
+          published: pageForm.published,
+        });
+        if (success) {
+          setPageMessage('Page created successfully.');
+          handleResetPageForm();
+        } else {
+          setPageMessage('Failed to create page.');
+        }
+      }
+    } catch (error) {
+      console.error('Failed to save page:', error);
+      setPageMessage('Failed to save page. Please try again.');
+    }
+  };
+
+  const handleDeletePage = async (pageId: string) => {
+    if (confirm('Are you sure you want to delete this page?')) {
+      try {
+        const success = await deletePage(pageId);
+        if (success) {
+          setPageMessage('Page deleted successfully.');
+        } else {
+          setPageMessage('Failed to delete page.');
+        }
+      } catch (error) {
+        console.error('Failed to delete page:', error);
+        setPageMessage('Failed to delete page. Please try again.');
+      }
+    }
+  };
+
+  // Error and loading states from contexts
+  const popupError = usePopup().error;
+
+  // Settings Contexts
+  const { settings: heroSettings, updateSettings: updateHeroSettings } = useHero();
+  const { settings: siteSettings, updateSettings: updateSiteSettings } = useSiteSettings();
+  const { settings: adminSettings, updateSettings: updateAdminSettings } = useAdminSettings();
+
   const [whatsappNumber, setWhatsappNumber] = useState(settings.whatsappNumber);
   const [supportEmail, setSupportEmail] = useState('itxahmadjan@gmail.com');
   const [siteLogo, setSiteLogo] = useState('');
   const [heroTitle, setHeroTitle] = useState('STOP BLEEDING MONEY On Overpriced Software!');
   const [heroSubtitle, setHeroSubtitle] = useState('10,000+ Smart Entrepreneurs have already ditched expensive subscriptions...');
+  const [metaDescription, setMetaDescription] = useState(adminSettings?.meta_description || 'Get premium AI & SEO tools at Huge Discounts! ChatGPT Plus, Canva Pro, Adobe Creative Suite & 15+ tools. Instant access, 24/7 support.');
 
-  // Error and loading states from contexts
-  const popupError = usePopup().error;
-
-  // Site Settings
-  const [siteSettings, setSiteSettings] = useState({
-    siteName: 'King Subscription',
-  tagline: 'Premium AI & SEO Tools at Huge Discounts',
-  metaDescription: 'Get premium AI & SEO tools at Huge Discounts! ChatGPT Plus, Canva Pro, Adobe Creative Suite & 15+ tools. Instant access, 24/7 support.',
-    enablePurchaseNotifications: settings.enablePurchaseNotifications,
-    enableFloatingCart: settings.enableFloatingCart,
-    enablePopups: true,
-    currencyDisplay: 'USD',
-    showDiscountBadges: settings.showDiscountBadges,
-    maintenanceMode: false,
+  const [localSiteSettings, setLocalSiteSettings] = useState({
+    siteName: siteSettings?.site_name || 'King Subscription',
+    tagline: siteSettings?.tagline || 'Premium AI & SEO Tools at Huge Discounts',
+    logoUrl: siteSettings?.logo_url || '',
   });
 
-  const [whatsappDirectOrder, setWhatsappDirectOrder] = useState<boolean>(settings.whatsappDirectOrder);
+  const [heroForm, setHeroForm] = useState({
+    title: heroSettings?.title || 'STOP BLEEDING MONEY On Overpriced Software!',
+    subtitle: heroSettings?.subtitle || '10,000+ Smart Entrepreneurs have already ditched expensive subscriptions...',
+  });
+
+  const [whatsappDirectOrder, setWhatsappDirectOrder] = useState<boolean>(adminSettings?.whatsapp_direct_order ?? false);
 
   useEffect(() => {
-    setWhatsappDirectOrder(settings.whatsappDirectOrder);
-    setWhatsappNumber(settings.whatsappNumber);
-    setSiteSettings((prev) => ({
-      ...prev,
-      enablePurchaseNotifications: settings.enablePurchaseNotifications,
-      enableFloatingCart: settings.enableFloatingCart,
-      showDiscountBadges: settings.showDiscountBadges,
-    }));
-  }, [settings]);
+    if (adminSettings) {
+      setWhatsappDirectOrder(adminSettings.whatsapp_direct_order);
+      setWhatsappNumber(adminSettings.whatsapp_number);
+    }
+  }, [adminSettings]);
 
 // Popup/Announcement Settings
   const { settings: popupSettings, updateSettings: persistPopupSettings, resetSettings: resetPopupSettings, isLoading: popupLoading } = usePopup();
@@ -330,9 +448,6 @@ const AdminDashboard: React.FC = () => {
       await updateSettings({
         whatsappNumber: whatsappNumber.trim(),
         whatsappDirectOrder,
-        enablePurchaseNotifications: siteSettings.enablePurchaseNotifications,
-        enableFloatingCart: siteSettings.enableFloatingCart,
-        showDiscountBadges: siteSettings.showDiscountBadges,
       });
 
       alert('✅ Settings saved successfully and synced across all browsers!');
@@ -469,10 +584,16 @@ const AdminDashboard: React.FC = () => {
               Manage your subscription business with complete control
             </p>
           </div>
-          <Button onClick={handleSaveSettings} className="bg-green-600 hover:bg-green-700" disabled={settingsLoading || popupLoading}>
-            <Save className="mr-2 h-4 w-4" />
-            {(settingsLoading || popupLoading) ? 'Saving...' : 'Save All Changes'}
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={handleSaveSettings} className="bg-green-600 hover:bg-green-700" disabled={settingsLoading || popupLoading}>
+              <Save className="mr-2 h-4 w-4" />
+              {(settingsLoading || popupLoading) ? 'Saving...' : 'Save All Changes'}
+            </Button>
+            <Button onClick={logout} variant="outline" className="text-red-600 border-red-600 hover:bg-red-50">
+              <LogOut className="mr-2 h-4 w-4" />
+              Logout
+            </Button>
+          </div>
         </div>
 
         {/* Loading Indicator */}
@@ -535,33 +656,53 @@ const AdminDashboard: React.FC = () => {
         )}
 
         <Tabs defaultValue="settings" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-7">
-            <TabsTrigger value="settings" className="flex items-center">
-              <Settings className="mr-2 h-4 w-4" />
+          <TabsList className="grid w-full grid-cols-12">
+            <TabsTrigger value="settings" className="flex items-center text-xs">
+              <Settings className="mr-1 h-3 w-3" />
               Settings
             </TabsTrigger>
-            <TabsTrigger value="products" className="flex items-center">
-              <Package className="mr-2 h-4 w-4" />
+            <TabsTrigger value="products" className="flex items-center text-xs">
+              <Package className="mr-1 h-3 w-3" />
               Products
             </TabsTrigger>
-            <TabsTrigger value="seo" className="flex items-center">
-              <Globe className="mr-2 h-4 w-4" />
+            <TabsTrigger value="categories" className="flex items-center text-xs">
+              <PenTool className="mr-1 h-3 w-3" />
+              Categories
+            </TabsTrigger>
+            <TabsTrigger value="reviews" className="flex items-center text-xs">
+              <MessageSquare className="mr-1 h-3 w-3" />
+              Reviews
+            </TabsTrigger>
+            <TabsTrigger value="commerce" className="flex items-center text-xs">
+              <DollarSign className="mr-1 h-3 w-3" />
+              Commerce
+            </TabsTrigger>
+            <TabsTrigger value="seo" className="flex items-center text-xs">
+              <Globe className="mr-1 h-3 w-3" />
               SEO
             </TabsTrigger>
-            <TabsTrigger value="popups" className="flex items-center">
-              <Zap className="mr-2 h-4 w-4" />
+            <TabsTrigger value="content" className="flex items-center text-xs">
+              <FilePlus2 className="mr-1 h-3 w-3" />
+              Content
+            </TabsTrigger>
+            <TabsTrigger value="popups" className="flex items-center text-xs">
+              <Zap className="mr-1 h-3 w-3" />
               Popups
             </TabsTrigger>
-            <TabsTrigger value="blog" className="flex items-center">
-              <BookOpen className="mr-2 h-4 w-4" />
+            <TabsTrigger value="blog" className="flex items-center text-xs">
+              <BookOpen className="mr-1 h-3 w-3" />
               Blog
             </TabsTrigger>
-            <TabsTrigger value="pages" className="flex items-center">
-              <PenTool className="mr-2 h-4 w-4" />
+            <TabsTrigger value="pages" className="flex items-center text-xs">
+              <PenTool className="mr-1 h-3 w-3" />
               Pages
             </TabsTrigger>
-            <TabsTrigger value="analytics" className="flex items-center">
-              <BarChart className="mr-2 h-4 w-4" />
+            <TabsTrigger value="static" className="flex items-center text-xs">
+              <FilePlus2 className="mr-1 h-3 w-3" />
+              Static
+            </TabsTrigger>
+            <TabsTrigger value="analytics" className="flex items-center text-xs">
+              <BarChart className="mr-1 h-3 w-3" />
               Analytics
             </TabsTrigger>
           </TabsList>
@@ -614,16 +755,16 @@ const AdminDashboard: React.FC = () => {
                     <Label htmlFor="siteName">Site Name</Label>
                     <Input
                       id="siteName"
-                      value={siteSettings.siteName}
-                      onChange={(e) => setSiteSettings({...siteSettings, siteName: e.target.value})}
+                      value={localSiteSettings.siteName}
+                      onChange={(e) => setLocalSiteSettings({...localSiteSettings, siteName: e.target.value})}
                     />
                   </div>
                   <div>
                     <Label htmlFor="tagline">Tagline</Label>
                     <Input
                       id="tagline"
-                      value={siteSettings.tagline}
-                      onChange={(e) => setSiteSettings({...siteSettings, tagline: e.target.value})}
+                      value={localSiteSettings.tagline}
+                      onChange={(e) => setLocalSiteSettings({...localSiteSettings, tagline: e.target.value})}
                     />
                   </div>
                   <div>
@@ -643,6 +784,45 @@ const AdminDashboard: React.FC = () => {
                 </CardContent>
               </Card>
             </div>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Meta Description Settings</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label htmlFor="metaDescription">Site Meta Description</Label>
+                  <Textarea
+                    id="metaDescription"
+                    value={metaDescription}
+                    onChange={(e) => setMetaDescription(e.target.value)}
+                    rows={3}
+                    placeholder="Get premium AI & SEO tools at Huge Discounts! ChatGPT Plus, Canva Pro, Adobe Creative Suite & 15+ tools. Instant access, 24/7 support."
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    This description appears in search engine results and social media shares. Keep it under 160 characters.
+                  </p>
+                  <p className="text-xs text-gray-400 mt-1">
+                    Current length: {metaDescription.length} characters
+                  </p>
+                </div>
+                <div className="flex justify-end">
+                  <Button
+                    onClick={async () => {
+                      const success = await updateAdminSettings({ meta_description: metaDescription.trim() });
+                      if (success) {
+                        alert('✅ Meta description updated successfully!');
+                      } else {
+                        alert('❌ Failed to update meta description');
+                      }
+                    }}
+                    className="bg-blue-600 hover:bg-blue-700"
+                  >
+                    Save Meta Description
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
 
             <Card>
               <CardHeader>
@@ -677,48 +857,6 @@ const AdminDashboard: React.FC = () => {
                 <CardContent className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <Label>Purchase Notifications</Label>
-                      <p className="text-sm text-gray-500">Show fake purchase notifications to visitors</p>
-                    </div>
-                    <Switch
-                      checked={siteSettings.enablePurchaseNotifications}
-                      onCheckedChange={(checked) => {
-                        const value = Boolean(checked);
-                        setSiteSettings(prev => ({ ...prev, enablePurchaseNotifications: value }));
-                        updateSettings({ enablePurchaseNotifications: value });
-                      }}
-                    />
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <Label>Floating Cart</Label>
-                      <p className="text-sm text-gray-500">Show floating WhatsApp cart button</p>
-                    </div>
-                    <Switch
-                      checked={siteSettings.enableFloatingCart}
-                      onCheckedChange={(checked) => {
-                        const value = Boolean(checked);
-                        setSiteSettings(prev => ({ ...prev, enableFloatingCart: value }));
-                        updateSettings({ enableFloatingCart: value });
-                      }}
-                    />
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <Label>Discount Badges</Label>
-                      <p className="text-sm text-gray-500">Show discount percentage on product cards</p>
-                    </div>
-                    <Switch
-                      checked={siteSettings.showDiscountBadges}
-                      onCheckedChange={(checked) => {
-                        const value = Boolean(checked);
-                        setSiteSettings(prev => ({ ...prev, showDiscountBadges: value }));
-                        updateSettings({ showDiscountBadges: value });
-                      }}
-                    />
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
                       <Label>WhatsApp Direct Order</Label>
                       <p className="text-sm text-gray-500">Skip form and open WhatsApp directly</p>
                     </div>
@@ -728,16 +866,6 @@ const AdminDashboard: React.FC = () => {
                         setWhatsappDirectOrder(checked as boolean);
                         updateSettings({ whatsappDirectOrder: Boolean(checked) });
                       }}
-                    />
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <Label>Maintenance Mode</Label>
-                      <p className="text-sm text-red-600">⚠️ Will disable the site for visitors</p>
-                    </div>
-                    <Switch
-                      checked={siteSettings.maintenanceMode}
-                      onCheckedChange={(checked) => setSiteSettings({...siteSettings, maintenanceMode: checked})}
                     />
                   </div>
                 </CardContent>
@@ -1262,39 +1390,210 @@ const AdminDashboard: React.FC = () => {
 
           {/* Pages Management Tab */}
           <TabsContent value="pages" className="space-y-6">
-            <h2 className="text-2xl font-bold">Pages Management</h2>
-            <p className="text-gray-600">Add, edit, or remove pages from your website</p>
-            
-            <Card>
-              <CardHeader>
-                <CardTitle>Custom Page Creator</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label>Page Name</Label>
-                  <Input placeholder="Terms of Service" />
-                </div>
-                <div>
-                  <Label>Page URL Slug</Label>
-                  <Input placeholder="terms-of-service" />
-                </div>
-                <div>
-                  <Label>Page Content (HTML)</Label>
-                  <Textarea 
-                    placeholder="<h1>Terms of Service</h1><p>Content here...</p>"
-                    rows={10}
-                  />
-                </div>
-                <Button className="bg-blue-600 hover:bg-blue-700">
-                  Create Page
-                </Button>
-              </CardContent>
-            </Card>
+            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+              <div>
+                <h2 className="text-2xl font-bold">Pages Management</h2>
+                <p className="text-sm text-muted-foreground">Create and manage custom pages for your website.</p>
+              </div>
+              <Button onClick={handleResetPageForm}>
+                <Plus className="mr-2 h-4 w-4" />
+                New Page
+              </Button>
+            </div>
+
+            {pageMessage && (
+              <div className="rounded-md border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-700 dark:border-green-900/40 dark:bg-green-900/20 dark:text-green-300">
+                {pageMessage}
+              </div>
+            )}
+
+            <div className="grid gap-6 lg:grid-cols-[1.5fr,2fr]">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <FilePlus2 className="h-5 w-5" />
+                    {editingPageId ? 'Edit Page' : 'Create Page'}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <form className="space-y-4" onSubmit={handlePageSubmit}>
+                    <div className="grid gap-2">
+                      <Label htmlFor="page_title">Title</Label>
+                      <Input
+                        id="page_title"
+                        value={pageForm.title}
+                        onChange={(e) => setPageForm(prev => ({ ...prev, title: e.target.value }))}
+                        placeholder="Terms of Service"
+                        required
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="page_slug">URL Slug</Label>
+                      <Input
+                        id="page_slug"
+                        value={pageForm.slug}
+                        onChange={(e) => setPageForm(prev => ({ ...prev, slug: e.target.value }))}
+                        placeholder="terms-of-service"
+                        required
+                      />
+                      <p className="text-xs text-muted-foreground">URL will be: /page/{pageForm.slug}</p>
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="page_content">Content (HTML)</Label>
+                      <Textarea
+                        id="page_content"
+                        rows={12}
+                        value={pageForm.content}
+                        onChange={(e) => setPageForm(prev => ({ ...prev, content: e.target.value }))}
+                        placeholder="<h1>Terms of Service</h1><p>Your content here...</p>"
+                        required
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="page_meta_title">SEO Meta Title (optional)</Label>
+                      <Input
+                        id="page_meta_title"
+                        value={pageForm.metaTitle}
+                        onChange={(e) => setPageForm(prev => ({ ...prev, metaTitle: e.target.value }))}
+                        placeholder="Terms of Service | King Subscriptions"
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="page_meta_description">SEO Meta Description (optional)</Label>
+                      <Textarea
+                        id="page_meta_description"
+                        rows={2}
+                        value={pageForm.metaDescription}
+                        onChange={(e) => setPageForm(prev => ({ ...prev, metaDescription: e.target.value }))}
+                        placeholder="Read our terms of service and understand your rights..."
+                      />
+                    </div>
+                    <div className="flex items-center justify-between rounded-md border bg-muted/30 px-3 py-2">
+                      <div>
+                        <p className="text-sm font-medium">Publish page</p>
+                        <p className="text-xs text-muted-foreground">Published pages are visible to visitors.</p>
+                      </div>
+                      <Switch
+                        checked={pageForm.published}
+                        onCheckedChange={(checked) => setPageForm(prev => ({ ...prev, published: checked }))}
+                      />
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <Button type="submit" className="flex-1">
+                        {editingPageId ? 'Update Page' : 'Create Page'}
+                      </Button>
+                      <Button type="button" variant="outline" onClick={handleResetPageForm}>
+                        Clear
+                      </Button>
+                    </div>
+                    {editingPageId && (
+                      <Button type="button" variant="ghost" className="w-full text-muted-foreground" onClick={handleResetPageForm}>
+                        Cancel editing
+                      </Button>
+                    )}
+                  </form>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Custom Pages</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
+                    <Badge variant="secondary">Total: {customPages.length}</Badge>
+                    <Badge variant="secondary">Published: {customPages.filter(p => p.published).length}</Badge>
+                  </div>
+                  {customPages.length === 0 ? (
+                    <p className="text-sm text-muted-foreground">No custom pages yet. Create your first page to get started.</p>
+                  ) : (
+                    <div className="space-y-3">
+                      {customPages.map((page) => (
+                        <div key={page.id} className="rounded-lg border bg-card/60 p-4 shadow-sm">
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <div>
+                              <p className="font-semibold leading-snug text-sm md:text-base">{page.title}</p>
+                              <p className="text-xs text-muted-foreground">/page/{page.slug}</p>
+                            </div>
+                            <Badge variant={page.published ? 'default' : 'outline'}>
+                              {page.published ? 'Published' : 'Draft'}
+                            </Badge>
+                          </div>
+                          <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
+                            {page.content.replace(/<[^>]*>/g, '').substring(0, 100)}...
+                          </p>
+                          <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+                            <span>Created: {formatBlogDate(page.created_at)}</span>
+                            {page.updated_at && page.updated_at !== page.created_at && (
+                              <span>Updated: {formatBlogDate(page.updated_at)}</span>
+                            )}
+                          </div>
+                          <div className="mt-3 flex flex-wrap gap-2">
+                            <Button size="sm" variant="outline" onClick={() => handleEditPage(page)}>
+                              <Edit className="mr-1 h-4 w-4" /> Edit
+                            </Button>
+                            {page.published && (
+                              <Button size="sm" variant="secondary" asChild>
+                                <a href={`/page/${page.slug}`} target="_blank" rel="noopener noreferrer">
+                                  <Eye className="mr-1 h-4 w-4" /> View
+                                </a>
+                              </Button>
+                            )}
+                            <Button size="sm" variant="destructive" onClick={() => handleDeletePage(page.id)}>
+                              <Trash2 className="mr-1 h-4 w-4" /> Delete
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Static Pages Tab */}
+          <TabsContent value="static" className="space-y-6">
+            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+              <div>
+                <h2 className="text-2xl font-bold">Static Pages Management</h2>
+                <p className="text-sm text-muted-foreground">Edit built-in pages like Privacy Policy, Terms & Conditions, etc.</p>
+              </div>
+            </div>
+
+            <StaticPagesEditor />
           </TabsContent>
 
           {/* Analytics Tab */}
           <TabsContent value="analytics" className="space-y-6">
-            <h2 className="text-2xl font-bold">Analytics Overview</h2>
+            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+              <div>
+                <h2 className="text-2xl font-bold">Analytics Overview</h2>
+                <p className="text-sm text-muted-foreground">Monitor your business performance and sales data.</p>
+              </div>
+              <Button
+                onClick={async () => {
+                  try {
+                    const response = await fetch('/api/analytics/overview', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' }
+                    });
+                    const result = await response.json();
+                    if (response.ok) {
+                      alert('✅ Sample analytics data seeded successfully!');
+                      window.location.reload(); // Refresh to show new data
+                    } else {
+                      alert('❌ Failed to seed sample data: ' + result.error);
+                    }
+                  } catch (error) {
+                    alert('❌ Error seeding sample data');
+                  }
+                }}
+                variant="outline"
+              >
+                Seed Sample Data
+              </Button>
+            </div>
 
             <div className="grid gap-6 md:grid-cols-4">
               <Card>
@@ -1387,6 +1686,192 @@ const AdminDashboard: React.FC = () => {
                 )}
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* Product Categories Tab */}
+          <TabsContent value="categories" className="space-y-6">
+            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+              <div>
+                <h2 className="text-2xl font-bold">Product Categories</h2>
+                <p className="text-sm text-muted-foreground">Organize your products into categories for better navigation.</p>
+              </div>
+              <Button onClick={() => {
+                const name = prompt('Enter category name:');
+                if (name?.trim()) {
+                  // This would open a form in a real implementation
+                  alert('Category creation form would open here');
+                }
+              }}>
+                <Plus className="mr-2 h-4 w-4" />
+                Add Category
+              </Button>
+            </div>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Categories</CardTitle>
+                <p className="text-sm text-muted-foreground">Manage product categories and their hierarchy.</p>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center py-8 text-muted-foreground">
+                  <PenTool className="mx-auto h-12 w-12 mb-4" />
+                  <p>Product Categories management interface would be implemented here.</p>
+                  <p className="text-sm mt-2">Features: Create, edit, delete categories, set hierarchy, manage SEO.</p>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Reviews Tab */}
+          <TabsContent value="reviews" className="space-y-6">
+            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+              <div>
+                <h2 className="text-2xl font-bold">Review Management</h2>
+                <p className="text-sm text-muted-foreground">Manage customer reviews and testimonials.</p>
+              </div>
+            </div>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Customer Reviews</CardTitle>
+                <p className="text-sm text-muted-foreground">Moderate and manage product reviews from customers.</p>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center py-8 text-muted-foreground">
+                  <MessageSquare className="mx-auto h-12 w-12 mb-4" />
+                  <p>Review management interface would be implemented here.</p>
+                  <p className="text-sm mt-2">Features: View reviews, approve/reject, mark as featured, respond to reviews.</p>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Commerce Tab */}
+          <TabsContent value="commerce" className="space-y-6">
+            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+              <div>
+                <h2 className="text-2xl font-bold">Commerce Settings</h2>
+                <p className="text-sm text-muted-foreground">Configure payment methods, shipping options, inventory, and coupons.</p>
+              </div>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-2">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Payment Methods</CardTitle>
+                  <p className="text-sm text-muted-foreground">Configure available payment options.</p>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center py-6 text-muted-foreground">
+                    <DollarSign className="mx-auto h-8 w-8 mb-2" />
+                    <p className="text-sm">Payment methods configuration</p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Shipping Options</CardTitle>
+                  <p className="text-sm text-muted-foreground">Set up delivery methods and rates.</p>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center py-6 text-muted-foreground">
+                    <Package className="mx-auto h-8 w-8 mb-2" />
+                    <p className="text-sm">Shipping options management</p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Inventory Management</CardTitle>
+                  <p className="text-sm text-muted-foreground">Track stock levels and manage inventory.</p>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center py-6 text-muted-foreground">
+                    <BarChart className="mx-auto h-8 w-8 mb-2" />
+                    <p className="text-sm">Inventory tracking and alerts</p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Coupon Management</CardTitle>
+                  <p className="text-sm text-muted-foreground">Create and manage discount codes.</p>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center py-6 text-muted-foreground">
+                    <Crown className="mx-auto h-8 w-8 mb-2" />
+                    <p className="text-sm">Discount codes and promotions</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Content Tab */}
+          <TabsContent value="content" className="space-y-6">
+            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+              <div>
+                <h2 className="text-2xl font-bold">Content Management</h2>
+                <p className="text-sm text-muted-foreground">Manage SEO meta tags, social media links, footer content, and navigation menus.</p>
+              </div>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-2">
+              <Card>
+                <CardHeader>
+                  <CardTitle>SEO Meta Tags</CardTitle>
+                  <p className="text-sm text-muted-foreground">Optimize pages for search engines.</p>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center py-6 text-muted-foreground">
+                    <Globe className="mx-auto h-8 w-8 mb-2" />
+                    <p className="text-sm">Meta tags and structured data</p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Social Media Links</CardTitle>
+                  <p className="text-sm text-muted-foreground">Manage social media profiles and links.</p>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center py-6 text-muted-foreground">
+                    <Users className="mx-auto h-8 w-8 mb-2" />
+                    <p className="text-sm">Social media integration</p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Footer Content</CardTitle>
+                  <p className="text-sm text-muted-foreground">Customize footer sections and links.</p>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center py-6 text-muted-foreground">
+                    <FilePlus2 className="mx-auto h-8 w-8 mb-2" />
+                    <p className="text-sm">Footer customization</p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Navigation Menus</CardTitle>
+                  <p className="text-sm text-muted-foreground">Build and manage site navigation.</p>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center py-6 text-muted-foreground">
+                    <PenTool className="mx-auto h-8 w-8 mb-2" />
+                    <p className="text-sm">Menu builder and navigation</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
         </Tabs>
       </div>

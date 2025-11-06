@@ -25,6 +25,7 @@ import { useProductsContext } from '@/context/ProductsContext';
 import { useCurrency } from '@/context/CurrencyContext';
 import HowItWorks from './HowItWorks';
 import { useSeo } from '@/context/SeoContext';
+import { useHero } from '@/context/HeroContext';
 
 // Updated CountdownTimer (kept as is)
 const CountdownTimer = () => {
@@ -84,6 +85,7 @@ const Home: React.FC = () => {
   useSeo('home');
   const { products } = useProductsContext();
   const { formatPrice } = useCurrency();
+  const { settings: heroSettings } = useHero();
   const featuredProducts = products.slice(0, 9);
 
   // Ensure page opens at top on navigation
@@ -107,7 +109,7 @@ const Home: React.FC = () => {
             <CountdownTimer />
             <h1 className="text-4xl md:text-7xl font-black mb-6 leading-tight">
               <span className="bg-gradient-to-r from-amber-500 to-orange-600 bg-clip-text text-transparent">
-                STOP SPENDING MONEY
+                {heroSettings?.title || 'STOP SPENDING MONEY'}
               </span>
               <br />
               <span className="text-foreground">
@@ -116,7 +118,7 @@ const Home: React.FC = () => {
             </h1>
             <div className="text-xl md:text-2xl mb-8 text-muted-foreground max-w-4xl mx-auto">
               <p className="mb-4">
-                🔥 <strong>10,000+ Professionals</strong> have already canceled their expensive subscription and Now they buy those subs from us at affordable prices.
+                {heroSettings?.subtitle || '🔥 10,000+ Professionals have already canceled their expensive subscription and Now they buy those subs from us at affordable prices.'}
               </p>
               <p className="text-lg">
                 <span className="text-green-600 font-bold">ChatGPT Plus, Canva Pro, Adobe Creative Suite</span> and {products.length}+ premium tools are available at <span className="bg-yellow-200 dark:bg-yellow-800 px-2 py-1 rounded font-bold">Huge Discounts</span>

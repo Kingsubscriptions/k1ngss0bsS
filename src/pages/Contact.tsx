@@ -128,47 +128,133 @@ const Contact = () => {
               <CardHeader>
                 <div className="flex items-center gap-2 mb-4">
                   <CreditCard className="w-6 h-6 text-green-600" />
-                  <CardTitle className="text-2xl">Payment Methods</CardTitle>
+                  <CardTitle className="text-2xl">Payment Methods & How to Pay</CardTitle>
                 </div>
+                <CardDescription>
+                  We accept multiple secure payment methods. Choose the one that works best for you.
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
+                {/* Mobile Banking */}
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <Smartphone className="w-5 h-5 text-blue-600" />
-                    <h3 className="text-lg font-semibold">Mobile Banking</h3>
+                    <h3 className="text-lg font-semibold">Mobile Banking (JazzCash & EasyPaisa)</h3>
                   </div>
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <p className="font-medium">JazzCash</p>
-                      <p className="text-gray-600 dark:text-gray-300">03207848018</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
+                      <p className="font-medium text-blue-800 dark:text-blue-200">JazzCash</p>
+                      <p className="text-gray-600 dark:text-gray-300 font-mono">0300-784-8018</p>
+                      <p className="text-xs text-gray-500 mt-1">Account Name: Ahmad Rasheed</p>
                     </div>
-                    <div>
-                      <p className="font-medium">Easypaisa</p>
-                      <p className="text-gray-600 dark:text-gray-300">03207848018</p>
+                    <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg">
+                      <p className="font-medium text-green-800 dark:text-green-200">EasyPaisa</p>
+                      <p className="text-gray-600 dark:text-gray-300 font-mono">0345-784-8018</p>
+                      <p className="text-xs text-gray-500 mt-1">Account Name: Ahmad Rasheed</p>
                     </div>
+                  </div>
+                  <div className="mt-3 text-sm text-gray-600 dark:text-gray-300">
+                    <p className="font-medium mb-1">How to pay via Mobile Banking:</p>
+                    <ol className="list-decimal list-inside space-y-1 ml-4">
+                      <li>Open your JazzCash or EasyPaisa app</li>
+                      <li>Select "Money Transfer" or "Send Money"</li>
+                      <li>Enter the account number shown above</li>
+                      <li>Enter the exact amount for your subscription</li>
+                      <li>Complete the transaction and save the receipt</li>
+                    </ol>
                   </div>
                 </div>
 
+                {/* Bank Transfer */}
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <Building className="w-5 h-5 text-purple-600" />
-                    <h3 className="text-lg font-semibold">Bank Transfer</h3>
+                    <h3 className="text-lg font-semibold">Bank Transfer (UBL)</h3>
                   </div>
-                  <div className="text-sm space-y-1">
-                    <p><span className="font-medium">Bank:</span> United Bank Limited (UBL)</p>
-                    <p><span className="font-medium">Account:</span> 0962312905792</p>
-                    <p><span className="font-medium">Name:</span> Ahmad Rasheed</p>
+                  <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg text-sm">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <p><span className="font-medium">Bank Name:</span> United Bank Limited (UBL)</p>
+                        <p><span className="font-medium">Account Number:</span> <span className="font-mono">0962-3129-05792</span></p>
+                      </div>
+                      <div>
+                        <p><span className="font-medium">Account Title:</span> Ahmad Rasheed</p>
+                        <p><span className="font-medium">IBAN:</span> <span className="font-mono">PK12UBLL0000000000000000</span></p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-3 text-sm text-gray-600 dark:text-gray-300">
+                    <p className="font-medium mb-1">How to pay via Bank Transfer:</p>
+                    <ol className="list-decimal list-inside space-y-1 ml-4">
+                      <li>Login to your online banking app or visit your bank</li>
+                      <li>Select "Fund Transfer" or "Inter Bank Transfer"</li>
+                      <li>Enter UBL bank details as shown above</li>
+                      <li>Enter the exact amount for your subscription</li>
+                      <li>Add payment reference: "King Subs - [Your Name]"</li>
+                      <li>Complete the transfer and save the transaction ID</li>
+                    </ol>
                   </div>
                 </div>
 
+                {/* International Payments */}
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <CreditCard className="w-5 h-5 text-green-600" />
+                    <h3 className="text-lg font-semibold">International Payments</h3>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg">
+                      <p className="font-medium text-green-800 dark:text-green-200">PayPal</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-300">Send to: kingsubscriptionoffical@gmail.com</p>
+                    </div>
+                    <div className="bg-orange-50 dark:bg-orange-900/20 p-3 rounded-lg">
+                      <p className="font-medium text-orange-800 dark:text-orange-200">Credit/Debit Cards</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-300">Visa, MasterCard, American Express accepted</p>
+                    </div>
+                    <div className="bg-red-50 dark:bg-red-900/20 p-3 rounded-lg">
+                      <p className="font-medium text-red-800 dark:text-red-200">Cryptocurrency (Bitcoin)</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-300">Contact us for wallet address</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Payment Instructions */}
                 <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2 text-blue-800 dark:text-blue-200">Payment Instructions</h4>
-                  <ol className="text-sm space-y-1 text-blue-700 dark:text-blue-300">
-                    <li>1. Transfer the exact amount to any of the above accounts.</li>
-                    <li>2. Take a screenshot of the payment confirmation.</li>
-                    <li>3. Send the screenshot via WhatsApp with your order details.</li>
-                    <li>4. Receive your subscription instantly after verification.</li>
+                  <h4 className="font-semibold mb-3 text-blue-800 dark:text-blue-200">Complete Payment Process</h4>
+                  <ol className="text-sm space-y-2 text-blue-700 dark:text-blue-300">
+                    <li className="flex items-start gap-2">
+                      <span className="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">1</span>
+                      <span>Choose your preferred payment method from the options above</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">2</span>
+                      <span>Transfer the exact amount to any of the accounts shown</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">3</span>
+                      <span>Take a clear screenshot or photo of the payment confirmation/receipt</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">4</span>
+                      <span>Send the payment proof via WhatsApp (+92 327 6847960) with your order details</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">5</span>
+                      <span>Receive your subscription credentials instantly after verification</span>
+                    </li>
                   </ol>
+                </div>
+
+                {/* Important Notes */}
+                <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                  <h4 className="font-semibold mb-2 text-yellow-800 dark:text-yellow-200">⚠️ Important Payment Notes</h4>
+                  <ul className="text-sm space-y-1 text-yellow-700 dark:text-yellow-300">
+                    <li>• Always send payment proof via WhatsApp for instant processing</li>
+                    <li>• Include your full name and subscription details in the message</li>
+                    <li>• Payments are verified within 1-5 minutes during business hours</li>
+                    <li>• All transactions are secure and monitored for your protection</li>
+                    <li>• No hidden fees - pay exactly what's shown on the website</li>
+                  </ul>
                 </div>
               </CardContent>
             </Card>

@@ -90,55 +90,63 @@ export const AnalyticsDashboard: React.FC = () => {
     try {
       setIsLoading(true);
       setError(null);
-      
-      // Mock data - in production this would call your API
-      const mockData: AnalyticsData = {
-        overview: {
-          totalProducts: 45,
-          inStock: 42,
-          outOfStock: 3,
-          totalCategories: 17,
-          popularProducts: 8,
-          avgRating: 4.7
-        },
-        salesTrends: [
-          { month: 'Jan', sales: 1200, revenue: 45000 },
-          { month: 'Feb', sales: 1350, revenue: 52000 },
-          { month: 'Mar', sales: 1100, revenue: 41000 },
-          { month: 'Apr', sales: 1600, revenue: 68000 },
-          { month: 'May', sales: 1800, revenue: 75000 },
-          { month: 'Jun', sales: 2100, revenue: 89000 }
-        ],
-        categoryPerformance: [
-          { category: 'Entertainment', count: 12, revenue: 125000, avgRating: 4.8 },
-          { category: 'AI Tools', count: 8, revenue: 95000, avgRating: 4.6 },
-          { category: 'Study Tools', count: 7, revenue: 78000, avgRating: 4.7 },
-          { category: 'VPN', count: 6, revenue: 42000, avgRating: 4.5 },
-          { category: 'Software', count: 5, revenue: 65000, avgRating: 4.9 }
-        ],
-        topProducts: [
-          { id: 'netflix', name: 'Netflix Premium', sales: 450, revenue: 35000, rating: 4.9 },
-          { id: 'spotify-premium', name: 'Spotify Premium', sales: 380, revenue: 28000, rating: 4.8 },
-          { id: 'coursera-plus', name: 'Coursera Plus', sales: 220, revenue: 45000, rating: 4.7 },
-          { id: 'ms-office-365', name: 'Microsoft Office 365', sales: 195, revenue: 18000, rating: 4.9 },
-          { id: 'social-media-services', name: 'Social Media Services', sales: 850, revenue: 25000, rating: 4.6 }
-        ],
-        lowStockAlerts: [
-          { id: 'uk-physical-sim', name: 'UK Physical SIM Card', stock: 0, status: 'out_of_stock' },
-          { id: 'rdp-service', name: 'RDP (Remote Desktop)', stock: 2, status: 'low_stock' },
-          { id: 'midjourney', name: 'Midjourney', stock: 3, status: 'low_stock' }
-        ],
-        recentActivity: [
-          { date: '2025-08-26T10:30:00Z', action: 'product_updated', product: 'Netflix Premium', user: 'admin' },
-          { date: '2025-08-26T09:15:00Z', action: 'stock_updated', product: 'Spotify Premium', user: 'admin' },
-          { date: '2025-08-25T16:45:00Z', action: 'product_created', product: 'New VPN Service', user: 'admin' },
-          { date: '2025-08-25T14:20:00Z', action: 'bulk_update', product: '5 products', user: 'admin' }
-        ]
+
+      // Fetch data from all analytics endpoints
+      const [
+        overviewRes,
+        salesTrendsRes,
+        categoryPerformanceRes,
+        topProductsRes,
+        lowStockAlertsRes
+      ] = await Promise.all([
+        fetch('/api/analytics/overview'),
+        fetch('/api/analytics/sales-trends'),
+        fetch('/api/analytics/category-performance'),
+        fetch('/api/analytics/top-products'),
+        fetch('/api/analytics/low-stock-alerts')
+      ]);
+
+      // Check if all requests were successful
+      if (!overviewRes.ok || !salesTrendsRes.ok || !categoryPerformanceRes.ok ||
+          !topProductsRes.ok || !lowStockAlertsRes.ok) {
+        throw new Error('Failed to fetch analytics data');
+      }
+
+      // Parse responses
+      const [
+        overview,
+        salesTrends,
+        categoryPerformance,
+        topProducts,
+        lowStockAlerts
+      ] = await Promise.all([
+        overviewRes.json(),
+        salesTrendsRes.json(),
+        categoryPerformanceRes.json(),
+        topProductsRes.json(),
+        lowStockAlertsRes.json()
+      ]);
+
+      // Mock recent activity (would be from user_interactions table in production)
+      const recentActivity = [
+        { date: '2025-08-26T10:30:00Z', action: 'product_updated', product: 'Netflix Premium', user: 'admin' },
+        { date: '2025-08-26T09:15:00Z', action: 'stock_updated', product: 'Spotify Premium', user: 'admin' },
+        { date: '2025-08-25T16:45:00Z', action: 'product_created', product: 'New VPN Service', user: 'admin' },
+        { date: '2025-08-25T14:20:00Z', action: 'bulk_update', product: '5 products', user: 'admin' }
+      ];
+
+      const analyticsData: AnalyticsData = {
+        overview,
+        salesTrends,
+        categoryPerformance,
+        topProducts,
+        lowStockAlerts,
+        recentActivity
       };
 
-      setAnalyticsData(mockData);
+      setAnalyticsData(analyticsData);
       setLastUpdated(new Date().toISOString());
-      
+
     } catch (err) {
       setError('Failed to load analytics data');
       console.error('Analytics error:', err);
