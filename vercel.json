@@ -1,20 +1,26 @@
 {
   "version": 2,
-  "framework": "vite",
-  "buildCommand": "pnpm build",
-  "outputDirectory": "dist",
-  "rewrites": [
+  "builds": [
     {
-      "source": "/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|assets|images|css|js|fonts).*)",
-      "destination": "/"
+      "src": "server/index.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
     }
   ],
-  "redirects": [
+  "rewrites": [
     {
-      "source": "/:path*",
-      "has": [{ "type": "host", "value": "www.k1ngss0bs-s.vercel.app" }],
-      "destination": "https://k1ngss0bs-s.vercel.app/:path*",
-      "permanent": true
+      "src": "/api/(.*)",
+      "dest": "/server/index.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }

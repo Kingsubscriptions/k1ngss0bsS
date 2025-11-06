@@ -26,22 +26,3 @@ To get started with King Subscription, follow these simple steps:
 2.  **Add to Cart:** Select the products you wish to purchase and add them to your cart.
 3.  **Checkout:** Complete the checkout process by providing your payment and contact information.
 4.  **Instant Access:** Once your order is confirmed, you will receive immediate access to your purchased subscriptions.
-
-### For Developers
-
-To run the project locally, follow these steps:
-
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/your-username/king-subscription.git
-    ```
-2.  **Install dependencies:**
-    ```bash
-    pnpm install
-    ```
-3.  **Start the development server:**
-    ```bash
-    pnpm run dev:full
-    ```
-4.  **Open your browser:**
-    Navigate to `http://localhost:5173` to view the website.

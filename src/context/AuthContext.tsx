@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 interface AuthContextType {
   isAuthenticated: boolean;
   token: string | null;
-  login: (token: string) => void;
+  login: (token: string, redirectUrl?: string) => void;
   logout: () => void;
   checkAuth: () => Promise<boolean>;
   refreshToken: () => Promise<boolean>;
@@ -108,11 +108,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   // Login function
-  const login = (newToken: string) => {
+  const login = (newToken: string, redirectUrl?: string) => {
     localStorage.setItem('adminToken', newToken);
     localStorage.setItem('adminLoginTime', Date.now().toString());
     setToken(newToken);
     setIsAuthenticated(true);
+    if (redirectUrl) {
+      navigate(redirectUrl);
+    }
   };
 
   // Logout function

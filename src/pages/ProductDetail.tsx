@@ -14,7 +14,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { useSeo } from "@/context/SeoContext";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Input } from "@/components/ui/input";
-import { Product } from "@/data/products";
+import { Product, isProductInStock } from "@/data/products";
+import SchemaMarkup from "@/components/SchemaMarkup";
 
 // Error Boundary Component
 interface ErrorBoundaryProps {
@@ -1376,31 +1377,7 @@ const ProductDetail: React.FC = () => {
       />
       
       {/* SEO structured data */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Product",
-            name: product.name || "",
-            image: product.image ? [product.image] : [],
-            description: product.longDescription || product.description || "",
-            brand: { "@type": "Brand", name: primaryCategory },
-            aggregateRating: { 
-              "@type": "AggregateRating", 
-              ratingValue: String(product.rating || 4.9), 
-              reviewCount: product.reviewCount || 2847 
-            },
-            offers: {
-              "@type": "Offer",
-              price: String(currentPrice || 0),
-              priceCurrency: currencyCtx?.currency || "PKR",
-              availability: isInStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-              url: typeof window !== "undefined" ? window.location.href : "",
-            },
-          }),
-        }}
-      />
+      {product && <SchemaMarkup product={product} />}
       
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb with better back button */}

@@ -32,6 +32,7 @@ import { SEOMetaProvider } from '@/context/SEOMetaContext';
 import { SocialMediaLinksProvider } from '@/context/SocialMediaLinksContext';
 import { FooterContentProvider } from '@/context/FooterContentContext';
 import { NavigationMenusProvider } from '@/context/NavigationMenusContext';
+import { GiveawayProvider } from '@/context/GiveawayContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
@@ -61,6 +62,9 @@ const ProductController = lazy(() => import('./pages/ProductController'));
 const Contact = lazy(() => import('./pages/Contact'));
 const TermsConditions = lazy(() => import('./pages/TermsConditions'));
 const CustomPage = lazy(() => import('./pages/CustomPage'));
+const Signup = lazy(() => import('./pages/Signup'));
+const Login = lazy(() => import('./pages/Login'));
+const FreeGiveaway = lazy(() => import('./pages/FreeGiveaway'));
 import PurchaseNotifications from './components/PurchaseNotifications';
 import FloatingElements from './components/FloatingElements';
 import FloatingCart from './components/FloatingCart';
@@ -145,6 +149,7 @@ const App = () => (
                         <SocialMediaLinksProvider>
                         <FooterContentProvider>
                         <NavigationMenusProvider>
+                        <GiveawayProvider>
                         <TooltipProvider>
                       <SecurityHeaders />
                       <SEOHead />
@@ -179,6 +184,9 @@ const App = () => (
                               <Route path="/productcontroller" element={<ProductController />} />
                               <Route path="/productdashboard" element={<ProductDashboard onLogout={() => {}} />} />
                               <Route path="/page/:slug" element={<CustomPage />} />
+                              <Route path="/signup" element={<Signup />} />
+                              <Route path="/login" element={<Login />} />
+                              <Route path="/free-giveaway" element={<FreeGiveaway />} />
                               <Route path="*" element={<NotFound />} />
                             </Routes>
                           </Suspense>
@@ -190,6 +198,7 @@ const App = () => (
                         <FloatingCart />
                       </div>
                         </TooltipProvider>
+                        </GiveawayProvider>
                         </NavigationMenusProvider>
                         </FooterContentProvider>
                         </SocialMediaLinksProvider>

@@ -43,6 +43,7 @@ import { useHero } from '@/context/HeroContext';
 import { useSiteSettings } from '@/context/SiteSettingsContext';
 import { useAdminSettings } from '@/context/AdminSettingsContext';
 import { useStaticPages } from '@/context/StaticPagesContext';
+import { useGiveaway } from '@/context/GiveawayContext';
 import StaticPagesEditor from '@/components/StaticPagesEditor';
 
 type BlogFormState = {
@@ -74,6 +75,7 @@ const AdminDashboard: React.FC = () => {
   const { settings, updateSettings, isLoading: settingsLoading, error: settingsError } = useSettings();
   const { products } = useProductsContext();
   const { posts: blogPosts, createPost, updatePost, deletePost, togglePublished, categories: blogCategories } = useBlogContext();
+  const { accounts: giveawayAccounts, addAccount: addGiveawayAccount, deleteAccount: deleteGiveawayAccount, isLoading: giveawayLoading, error: giveawayError } = useGiveaway();
 
   const makeEmptyBlogForm = (): BlogFormState => ({
     title: '',
@@ -106,6 +108,10 @@ const AdminDashboard: React.FC = () => {
   });
   const [editingPageId, setEditingPageId] = useState<string | null>(null);
   const [pageMessage, setPageMessage] = useState('');
+
+  // Giveaway state
+  const [giveawayForm, setGiveawayForm] = useState({ email: '', password: '' });
+  const [giveawayMessage, setGiveawayMessage] = useState('');
 
   // Custom Pages handlers
   const handleResetPageForm = () => {
@@ -202,6 +208,36 @@ const AdminDashboard: React.FC = () => {
       }
     }
   };
+
+  // Giveaway handlers
+  const handleGiveawaySubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setGiveawayMessage('');
+    if (!giveawayForm.email || !giveawayForm.password) {
+      setGiveawayMessage('Email and password are required.');
+      return;
+    }
+
+    const success = await addGiveawayAccount(giveawayForm.email, giveawayForm.password);
+    if (success) {
+      setGiveawayMessage('Account added successfully.');
+      setGiveawayForm({ email: '', password: '' });
+    } else {
+      setGiveawayMessage(giveawayError || 'Failed to add account.');
+    }
+  };
+
+  const handleDeleteGiveaway = async (id: number) => {
+    if (confirm('Are you sure you want to delete this giveaway account?')) {
+      const success = await deleteGiveawayAccount(id);
+      if (success) {
+        setGiveawayMessage('Account deleted successfully.');
+      } else {
+        setGiveawayMessage(giveawayError || 'Failed to delete account.');
+      }
+    }
+  };
+
 
   // Error and loading states from contexts
   const popupError = usePopup().error;
@@ -700,6 +736,10 @@ const AdminDashboard: React.FC = () => {
             <TabsTrigger value="static" className="flex items-center text-xs">
               <FilePlus2 className="mr-1 h-3 w-3" />
               Static
+            </TabsTrigger>
+            <TabsTrigger value="giveaway" className="flex items-center text-xs">
+              <Crown className="mr-1 h-3 w-3" />
+              Giveaway
             </TabsTrigger>
             <TabsTrigger value="analytics" className="flex items-center text-xs">
               <BarChart className="mr-1 h-3 w-3" />
@@ -1563,6 +1603,86 @@ const AdminDashboard: React.FC = () => {
 
             <StaticPagesEditor />
           </TabsContent>
+
+          {/* Giveaway Tab */}
+          <TabsContent value="giveaway" className="space-y-6">
+            <div className="grid gap-6 lg:grid-cols-[1.5fr,2fr]">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Plus className="h-5 w-5" />
+                    Add Giveaway Account
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {giveawayMessage && (
+                    <div className="mb-4 rounded-md border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-700 dark:border-green-900/40 dark:bg-green-900/20 dark:text-green-300">
+                      {giveawayMessage}
+                    </div>
+                  )}
+                  <form className="space-y-4" onSubmit={handleGiveawaySubmit}>
+                    <div className="grid gap-2">
+                      <Label htmlFor="giveaway_email">Email</Label>
+                      <Input
+                        id="giveaway_email"
+                        type="email"
+                        value={giveawayForm.email}
+                        onChange={(e) => setGiveawayForm({ ...giveawayForm, email: e.target.value })}
+                        placeholder="user@example.com"
+                        required
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="giveaway_password">Password</Label>
+                      <Input
+                        id="giveaway_password"
+                        type="password"
+                        value={giveawayForm.password}
+                        onChange={(e) => setGiveawayForm({ ...giveawayForm, password: e.target.value })}
+                        placeholder="••••••••"
+                        required
+                      />
+                    </div>
+                    <Button type="submit" disabled={giveawayLoading}>
+                      {giveawayLoading ? 'Adding...' : 'Add Account'}
+                    </Button>
+                  </form>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Available Accounts</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {giveawayLoading ? (
+                    <p>Loading accounts...</p>
+                  ) : giveawayAccounts.length === 0 ? (
+                    <p className="text-sm text-muted-foreground">No accounts available for giveaway.</p>
+                  ) : (
+                    <div className="space-y-3">
+                      {giveawayAccounts.map((account) => (
+                        <div key={account.id} className="rounded-lg border bg-card/60 p-3 shadow-sm">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="font-semibold text-sm">{account.email}</p>
+                              <Badge variant={account.is_claimed ? 'secondary' : 'default'}>
+                                {account.is_claimed ? 'Claimed' : 'Available'}
+                              </Badge>
+                            </div>
+                            <Button size="sm" variant="destructive" onClick={() => handleDeleteGiveaway(account.id)}>
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
 
           {/* Analytics Tab */}
           <TabsContent value="analytics" className="space-y-6">

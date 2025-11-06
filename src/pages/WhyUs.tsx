@@ -18,11 +18,12 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useCurrency } from '@/context/CurrencyContext';
+import { useProductsContext } from '@/context/ProductsContext';
 import WhatsAppButton from '@/components/WhatsAppButton';
-import { products } from '@/data/products';
 
 const WhyUs: React.FC = () => {
   const { formatPrice } = useCurrency();
+  const { products } = useProductsContext();
 
   // Map of product IDs to display in table
   const comparisonProducts = [

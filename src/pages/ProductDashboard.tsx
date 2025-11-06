@@ -36,7 +36,12 @@ interface DashboardProps {
 }
 
 const ProductDashboard: React.FC<DashboardProps> = ({ onLogout }) => {
-  const { products: allProducts, setProducts: setProductsContext } = useProductsContext();
+  const {
+    products: allProducts,
+    setProducts: setProductsContext,
+    deleteProduct: deleteProductContext,
+    updateProduct: updateProductContext,
+  } = useProductsContext();
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
@@ -160,40 +165,44 @@ const ProductDashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const handleBulkAction = async (action: 'in-stock' | 'out-stock' | 'delete') => {
     if (selectedProducts.length === 0) return;
 
+    const promises: Promise<void>[] = [];
+
     switch (action) {
       case 'delete': {
         if (window.confirm(`Delete ${selectedProducts.length} selected products?`)) {
-          const next = allProducts.filter((product) => !selectedProducts.includes(product.id));
-          await setProductsContext(next);
-          setSelectedProducts([]);
+          selectedProducts.forEach(id => promises.push(deleteProductContext(id)));
         }
         break;
       }
       case 'in-stock': {
-        const next = allProducts.map((product) =>
-          selectedProducts.includes(product.id) ? { ...product, stock: product.stock || true } : product
-        );
-        await setProductsContext(next);
-        setSelectedProducts([]);
+        allProducts.forEach(product => {
+          if (selectedProducts.includes(product.id)) {
+            promises.push(updateProductContext({ ...product, stock: true }));
+          }
+        });
         break;
       }
       case 'out-stock': {
-        const next = allProducts.map((product) =>
-          selectedProducts.includes(product.id) ? { ...product, stock: false } : product
-        );
-        await setProductsContext(next);
-        setSelectedProducts([]);
+        allProducts.forEach(product => {
+          if (selectedProducts.includes(product.id)) {
+            promises.push(updateProductContext({ ...product, stock: false }));
+          }
+        });
         break;
       }
       default:
         break;
     }
+
+    if (promises.length > 0) {
+      await Promise.all(promises);
+      setSelectedProducts([]);
+    }
   };
 
   const deleteProduct = async (productId: string) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
-      const next = allProducts.filter((product) => product.id !== productId);
-      await setProductsContext(next);
+      await deleteProductContext(productId);
     }
   };
 
@@ -209,12 +218,7 @@ const ProductDashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   };
 
   const handleSaveProduct = async (product: Product) => {
-    if (editingProduct) {
-      const next = allProducts.map((item) => (item.id === product.id ? product : item));
-      await setProductsContext(next);
-    } else {
-      await setProductsContext([...allProducts, product]);
-    }
+    await updateProductContext(product);
     setEditingProduct(null);
     setShowCreateForm(false);
   };

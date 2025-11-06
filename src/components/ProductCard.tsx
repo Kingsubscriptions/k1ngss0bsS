@@ -390,12 +390,12 @@ Please send me payment details. Thank you!`;
           {/* Image Area - Smaller on Mobile */}
           <div className="relative mb-3">
 <div className={cn(
-              "w-full relative rounded-md overflow-hidden bg-muted",
+              "w-full relative rounded-md overflow-hidden bg-muted p-4",
               isMobile ? "aspect-[4/3] max-h-[100px]" : "aspect-square sm:aspect-[3/2]"
             )}>
                 <OptimizedImage
                   src={product.images?.[0] || imageSrc}
-                  alt={product.name}
+                  alt={`Logo for ${product.name}`}
                   width={isMobile ? 200 : 600}
                   height={isMobile ? 150 : 450}
                   className={cn(
@@ -422,12 +422,12 @@ Please send me payment details. Thank you!`;
             )}
             
             {/* Verified Badge */}
-            <div className="absolute top-1.5 right-1.5">
+            <div className="absolute top-1.5 right-1.5" role="status" aria-label="Verified Product">
               <span className={cn(
                 "font-semibold rounded-full text-white bg-green-600 flex items-center gap-1",
                 isMobile ? "text-xs px-1.5 py-0.5" : "text-xs px-2 py-1"
               )}>
-                <ShieldCheck className={cn(isMobile ? "w-2.5 h-2.5" : "w-3 h-3")} />
+                <ShieldCheck className={cn(isMobile ? "w-2.5 h-2.5" : "w-3 h-3")} aria-hidden="true" />
                 {isMobile ? "✓" : "Verified"}
               </span>
             </div>
@@ -437,7 +437,8 @@ Please send me payment details. Thank you!`;
               <div className={cn(
                 "absolute bottom-1.5 left-1.5 bg-amber-100 text-amber-800 rounded font-medium",
                 isMobile ? "px-1.5 py-0.5 text-xs" : "px-2 py-1 text-xs"
-              )}>
+              )} role="status" aria-label={`Only ${quantity} left in stock`}>
+                <AlertCircle className="inline-block w-3 h-3 mr-1" aria-hidden="true" />
                 Only {quantity} left!
               </div>
             )}
@@ -452,18 +453,18 @@ Please send me payment details. Thank you!`;
             "flex items-center gap-1.5 text-muted-foreground mb-2",
             isMobile ? "text-xs" : "text-xs"
           )}>
-            <Tag className={cn(isMobile ? "w-2.5 h-2.5" : "w-3 h-3", "opacity-70")} />
-            <span className="truncate">{primaryCategory}</span>
+            <Tag className={cn(isMobile ? "w-2.5 h-2.5" : "w-3 h-3", "opacity-70")} aria-hidden="true" />
+            <span className="truncate">Category: {primaryCategory}</span>
           </div>
 
           {/* Stock Status Pill */}
-          <div className="mb-2">
+          <div className="mb-2" role="status" aria-label={isInStock ? "In Stock" : "Out of Stock"}>
             {isInStock ? (
               <span className={cn(
                 "inline-flex items-center font-semibold rounded-full bg-green-100 text-green-800",
                 isMobile ? "px-2 py-0.5 text-xs" : "px-3 py-1 text-xs"
               )}>
-                <CheckCircle className={cn(isMobile ? "w-2.5 h-2.5 mr-0.5" : "w-3 h-3 mr-1")} />
+                <CheckCircle className={cn(isMobile ? "w-2.5 h-2.5 mr-0.5" : "w-3 h-3 mr-1")} aria-hidden="true" />
                 In Stock
               </span>
             ) : (
@@ -471,7 +472,7 @@ Please send me payment details. Thank you!`;
                 "inline-flex items-center font-semibold rounded-full bg-red-100 text-red-800",
                 isMobile ? "px-2 py-0.5 text-xs" : "px-3 py-1 text-xs"
               )}>
-                <AlertCircle className={cn(isMobile ? "w-2.5 h-2.5 mr-0.5" : "w-3 h-3 mr-1")} />
+                <AlertCircle className={cn(isMobile ? "w-2.5 h-2.5 mr-0.5" : "w-3 h-3 mr-1")} aria-hidden="true" />
                 Out of Stock
               </span>
             )}
@@ -481,11 +482,11 @@ Please send me payment details. Thank you!`;
           <div className={cn(
             "flex items-center gap-1 text-muted-foreground mb-3",
             isMobile ? "text-xs" : "text-sm"
-          )}>
+          )} role="status" aria-label={`Rating: ${(product.rating ?? 4.9).toFixed(1)} out of 5 stars. ${randomPurchaseCount.toLocaleString()} bought.`}>
             <Star className={cn(
               "fill-yellow-400 text-yellow-400",
               isMobile ? "w-3 h-3" : "w-4 h-4"
-            )} />
+            )} aria-hidden="true" />
             <span className="font-semibold">
               {(product.rating ?? 4.9).toFixed(1)}
             </span>
@@ -497,13 +498,13 @@ Please send me payment details. Thank you!`;
           <div className={cn(
             "mb-4 space-y-2",
             isMobile ? "text-xs" : "text-sm"
-          )}>
+          )} aria-label="Product Features">
             {(product.features?.slice(0, 4) || []).map((feature, i) => (
               <div key={i} className="flex items-start text-muted-foreground">
                 <CheckCircle className={cn(
                   "text-green-500 flex-shrink-0 mt-0.5",
                   isMobile ? "w-3 h-3 mr-1.5" : "w-4 h-4 mr-2"
-                )} />
+                )} aria-hidden="true" />
                 <span className="leading-tight">{feature}</span>
               </div>
             ))}
@@ -543,13 +544,13 @@ Please send me payment details. Thank you!`;
           <div className={cn(
             "flex items-center justify-between mb-3 text-muted-foreground",
             isMobile ? "text-xs" : "text-xs"
-          )}>
-            <div className="flex items-center">
-              <Shield className={cn(isMobile ? "w-2.5 h-2.5 mr-0.5" : "w-3 h-3 mr-1")} />
+          )} aria-label="Trust Badges">
+            <div className="flex items-center" aria-label="Secure Transaction">
+              <Shield className={cn(isMobile ? "w-2.5 h-2.5 mr-0.5" : "w-3 h-3 mr-1")} aria-hidden="true" />
               Secure
             </div>
-            <div className="flex items-center">
-              <Truck className={cn(isMobile ? "w-2.5 h-2.5 mr-0.5" : "w-3 h-3 mr-1")} />
+            <div className="flex items-center" aria-label="Free Delivery">
+              <Truck className={cn(isMobile ? "w-2.5 h-2.5 mr-0.5" : "w-3 h-3 mr-1")} aria-hidden="true" />
               Free Delivery
             </div>
           </div>
