@@ -23,42 +23,37 @@ import WhatsAppButton from '@/components/WhatsAppButton';
 
 const WhyUs: React.FC = () => {
   const { formatPrice } = useCurrency();
-  const { products } = useProductsContext();
+  const { products, isLoading } = useProductsContext();
 
-  // Map of product IDs to display in table
-  const comparisonProducts = [
-    { id: 'chatgpt-plus', name: 'ChatGPT Plus', duration: 'monthly' },
-    { id: 'adobe-creative-cloud', name: 'Adobe Creative Cloud', duration: 'monthly' },
-    { id: 'canva-pro', name: 'Canva Pro', duration: 'yearly' },
-    { id: 'semrush-pro', name: 'SEMrush Pro', duration: 'monthly' },
-  ];
+  // Dynamically select the first four products for comparison
+  const comparisonProducts = products.slice(0, 4).map(p => ({
+    id: p.id,
+    name: p.name,
+    // Prioritize monthly, fallback to yearly for display
+    duration: p.price?.monthly ? 'monthly' : 'yearly',
+  }));
 
-  // Helper to get product price
-  function getProductPrice(id, duration) {
-    const prod = products.find(p => p.id === id);
-    if (!prod || !prod.price) return { king: '-', retail: '-' };
-    const king = prod.price[duration] || '-';
-    const retail = prod.price.original || '-';
-    return { king, retail };
-  }
-
-  // Calculate total annual savings
-  let totalKing = 0, totalRetail = 0;
-  comparisonProducts.forEach(({ id, duration }) => {
-    const prod = products.find(p => p.id === id);
-    if (prod && prod.price) {
-      const king = prod.price[duration] || 0;
-      const retail = prod.price.original || 0;
-      // If yearly, count once; if monthly, multiply by 12
-      if (duration === 'yearly') {
-        totalKing += king;
-        totalRetail += retail;
-      } else {
-        totalKing += king * 12;
-        totalRetail += retail * 12;
-      }
+  // Calculate total annual savings from all available products
+  let totalKing = 0;
+  let totalRetail = 0;
+  products.forEach(prod => {
+    if (prod.price) {
+      const monthlyPrice = prod.price.monthly || 0;
+      const originalPrice = prod.price.original || monthlyPrice; // Use monthly if original is missing
+      totalKing += monthlyPrice * 12; // Annualize
+      totalRetail += originalPrice * 12; // Annualize
     }
   });
+
+  const totalAnnualSavings = totalRetail - totalKing;
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <RefreshCw className="animate-spin h-12 w-12 text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen py-12">
@@ -96,11 +91,11 @@ const WhyUs: React.FC = () => {
                     <th className="pb-4 text-lg font-semibold text-center text-red-600">Traditional Pricing</th>
                   </tr>
                 </thead>
-                <tbody className="space-y-4">
+                <tbody>
                   {comparisonProducts.map(({ id, name, duration }) => {
                     const prod = products.find(p => p.id === id);
-                    if (!prod) return null;
-                    const king = prod.price[duration] || '-';
+                    if (!prod || !prod.price) return null;
+                    const king = prod.price[duration] || (duration === 'monthly' ? prod.price.yearly : '-') || '-';
                     const retail = prod.price.original || '-';
                     return (
                       <tr className="border-b" key={id}>
@@ -116,11 +111,8 @@ const WhyUs: React.FC = () => {
                   })}
                   <tr className="bg-green-50 dark:bg-green-950/20">
                     <td className="py-4 font-bold text-lg">Total Annual Savings</td>
-                    <td className="py-4 text-center">
-                      <span className="text-green-600 font-bold text-2xl">{formatPrice(totalRetail - totalKing)}+ SAVED</span>
-                    </td>
-                    <td className="py-4 text-center">
-                      <span className="text-red-600 font-bold text-xl">{formatPrice(totalRetail)}+ WASTED</span>
+                    <td className="py-4 text-center" colSpan={2}>
+                      <span className="text-green-600 font-bold text-2xl">{formatPrice(totalAnnualSavings)}+ SAVED ACROSS ALL PRODUCTS</span>
                     </td>
                   </tr>
                 </tbody>
