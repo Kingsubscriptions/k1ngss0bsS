@@ -399,9 +399,10 @@ Please send me payment details. Thank you!`;
                   width={isMobile ? 200 : 600}
                   height={isMobile ? 150 : 450}
                   className={cn(
-                    "object-cover w-full h-full transition-transform duration-300 group-hover:scale-105",
+                    "w-full h-full transition-transform duration-300 group-hover:scale-105",
                     imgLoading ? 'blur-sm' : 'blur-0'
                   )}
+                  objectFit="contain"
                   placeholder="/placeholder-image.jpg"
                   onLoad={() => setImgLoading(false)}
                   onError={() => setImgError(true)}

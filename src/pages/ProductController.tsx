@@ -16,27 +16,33 @@ const LoginForm: React.FC<LoginProps> = ({ onLogin }) => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   
-  // Use environment variable for password in production
-  const ADMIN_PASSWORD = import.meta.env.VITE_PRODUCT_CONTROLLER_PASSWORD || 'admin123';
-  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
-    
-    // Simulate network delay for security
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    if (password === ADMIN_PASSWORD) {
-      // Set session in localStorage
-      localStorage.setItem('productController_auth', 'authenticated');
-      localStorage.setItem('productController_loginTime', Date.now().toString());
+
+    try {
+      const response = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Login failed');
+      }
+
+      localStorage.setItem('adminToken', data.token);
       onLogin();
-    } else {
-      setError('Invalid password. Access denied.');
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
     }
-    
-    setIsLoading(false);
   };
   
   return (
@@ -100,22 +106,10 @@ const ProductController: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   
   useEffect(() => {
-    // Check if user is already authenticated
-    const auth = localStorage.getItem('productController_auth');
-    const loginTime = localStorage.getItem('productController_loginTime');
-    
-    if (auth === 'authenticated' && loginTime) {
-      // Check if session is still valid (24 hours)
-      const sessionDuration = 24 * 60 * 60 * 1000; // 24 hours
-      const isSessionValid = Date.now() - parseInt(loginTime) < sessionDuration;
-      
-      if (isSessionValid) {
-        setIsAuthenticated(true);
-      } else {
-        // Session expired, clear auth
-        localStorage.removeItem('productController_auth');
-        localStorage.removeItem('productController_loginTime');
-      }
+    const token = localStorage.getItem('adminToken');
+    if (token) {
+      // You might want to verify the token with the backend here for enhanced security
+      setIsAuthenticated(true);
     }
     setIsLoading(false);
   }, []);
@@ -125,8 +119,7 @@ const ProductController: React.FC = () => {
   };
   
   const handleLogout = () => {
-    localStorage.removeItem('productController_auth');
-    localStorage.removeItem('productController_loginTime');
+    localStorage.removeItem('adminToken');
     setIsAuthenticated(false);
   };
   

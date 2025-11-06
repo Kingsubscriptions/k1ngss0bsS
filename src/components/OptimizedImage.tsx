@@ -10,6 +10,7 @@ interface OptimizedImageProps {
   placeholder?: string;
   onLoad?: () => void;
   onError?: () => void;
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
 }
 
 const OptimizedImage: React.FC<OptimizedImageProps> = ({
@@ -21,7 +22,8 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   priority = false,
   placeholder,
   onLoad,
-  onError
+  onError,
+  objectFit = 'cover'
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -124,7 +126,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           style={{
             width: width || 'auto',
             height: height || 'auto',
-            objectFit: 'cover'
+            objectFit: objectFit
           }}
         />
 
@@ -191,7 +193,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
             style={{
               width: width || 'auto',
               height: height || 'auto',
-              objectFit: 'cover'
+              objectFit: objectFit
             }}
           />
         </picture>
