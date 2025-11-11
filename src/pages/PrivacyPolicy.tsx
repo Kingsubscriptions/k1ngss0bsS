@@ -30,6 +30,20 @@ const PrivacyPolicy: React.FC = () => {
           </CardContent>
         </Card>
 
+        <Card className="mb-8 border-yellow-200 bg-yellow-50 dark:bg-yellow-900/20">
+          <CardHeader>
+            <CardTitle className="flex items-center text-yellow-700 dark:text-yellow-400">
+              <AlertTriangle className="mr-2 h-5 w-5" />
+              Disclaimer
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-yellow-700 dark:text-yellow-300">
+              All subscriptions and tools sold on this website are official products. We are not affiliated with the original developers. We are resellers who purchase subscriptions from other sellers and provide them to consumers.
+            </p>
+          </CardContent>
+        </Card>
+
         <div className="space-y-8">
           <Card>
             <CardHeader>

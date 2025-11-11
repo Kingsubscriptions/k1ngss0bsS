@@ -20,10 +20,8 @@ import {
   Users, 
   CheckCircle,
   XCircle,
-  BarChart3,
-  GripVertical
+  BarChart3
 } from 'lucide-react';
-import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import ProductForm from './ProductForm';
 import AnalyticsDashboard from '@/components/AnalyticsDashboard';
 
@@ -36,12 +34,7 @@ interface DashboardProps {
 }
 
 const ProductDashboard: React.FC<DashboardProps> = ({ onLogout }) => {
-  const {
-    products: allProducts,
-    setProducts: setProductsContext,
-    deleteProduct: deleteProductContext,
-    updateProduct: updateProductContext,
-  } = useProductsContext();
+  const { products: allProducts, setProducts: setProductsContext } = useProductsContext();
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
@@ -165,44 +158,40 @@ const ProductDashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   const handleBulkAction = async (action: 'in-stock' | 'out-stock' | 'delete') => {
     if (selectedProducts.length === 0) return;
 
-    const promises: Promise<void>[] = [];
-
     switch (action) {
       case 'delete': {
         if (window.confirm(`Delete ${selectedProducts.length} selected products?`)) {
-          selectedProducts.forEach(id => promises.push(deleteProductContext(id)));
+          const next = allProducts.filter((product) => !selectedProducts.includes(product.id));
+          await setProductsContext(next);
+          setSelectedProducts([]);
         }
         break;
       }
       case 'in-stock': {
-        allProducts.forEach(product => {
-          if (selectedProducts.includes(product.id)) {
-            promises.push(updateProductContext({ ...product, stock: true }));
-          }
-        });
+        const next = allProducts.map((product) =>
+          selectedProducts.includes(product.id) ? { ...product, stock: product.stock || true } : product
+        );
+        await setProductsContext(next);
+        setSelectedProducts([]);
         break;
       }
       case 'out-stock': {
-        allProducts.forEach(product => {
-          if (selectedProducts.includes(product.id)) {
-            promises.push(updateProductContext({ ...product, stock: false }));
-          }
-        });
+        const next = allProducts.map((product) =>
+          selectedProducts.includes(product.id) ? { ...product, stock: false } : product
+        );
+        await setProductsContext(next);
+        setSelectedProducts([]);
         break;
       }
       default:
         break;
     }
-
-    if (promises.length > 0) {
-      await Promise.all(promises);
-      setSelectedProducts([]);
-    }
   };
 
   const deleteProduct = async (productId: string) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
-      await deleteProductContext(productId);
+      const next = allProducts.filter((product) => product.id !== productId);
+      await setProductsContext(next);
     }
   };
 
@@ -218,7 +207,12 @@ const ProductDashboard: React.FC<DashboardProps> = ({ onLogout }) => {
   };
 
   const handleSaveProduct = async (product: Product) => {
-    await updateProductContext(product);
+    if (editingProduct) {
+      const next = allProducts.map((item) => (item.id === product.id ? product : item));
+      await setProductsContext(next);
+    } else {
+      await setProductsContext([...allProducts, product]);
+    }
     setEditingProduct(null);
     setShowCreateForm(false);
   };
@@ -231,49 +225,7 @@ const ProductDashboard: React.FC<DashboardProps> = ({ onLogout }) => {
     categories: getUniqueCategories().length,
   };
 
-  const onDragEnd = async (result: DropResult) => {
-    const { destination, source } = result;
-    if (!destination) return;
-    if (destination.droppableId === source.droppableId && destination.index === source.index) return;
-
-    const reorderedProducts = Array.from(allProducts);
-    const [removed] = reorderedProducts.splice(source.index, 1);
-    reorderedProducts.splice(destination.index, 0, removed);
-
-    setProductsContext(reorderedProducts);
-
-    try {
-      const token = localStorage.getItem('adminToken');
-      if (!token) {
-        console.error('Admin token not found');
-        setSaveStatus('error');
-        return;
-      }
-
-      setSaveStatus('saving');
-      const response = await fetch('/api/admin/products', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(reorderedProducts),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to save product order');
-      }
-
-      setSaveStatus('success');
-    } catch (error) {
-      console.error('Error saving product order:', error);
-      setSaveStatus('error');
-    } finally {
-      setTimeout(() => setSaveStatus('idle'), 2000);
-    }
-  };
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="bg-white dark:bg-gray-800 shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -486,7 +438,6 @@ const ProductDashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="w-8"></TableHead>
                       <TableHead className="w-12">
                         <Checkbox
                           checked={selectedProducts.length === filteredProducts.length && filteredProducts.length > 0}
@@ -501,28 +452,21 @@ const ProductDashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                       <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
-                  <Droppable droppableId="products">
-                    {(provided) => (
-                      <TableBody {...provided.droppableProps} ref={provided.innerRef}>
-                        {filteredProducts.map((product, index) => {
-                          const stockStatus = getStockStatus(product.stock);
-                          return (
-                            <Draggable key={product.id} draggableId={product.id} index={index}>
-                              {(provided) => (
-                                <TableRow ref={provided.innerRef} {...provided.draggableProps}>
-                                  <TableCell {...provided.dragHandleProps}>
-                                    <GripVertical className="w-4 h-4 text-gray-400" />
-                                  </TableCell>
-                                  <TableCell>
-                                    <Checkbox
-                                      checked={selectedProducts.includes(product.id)}
-                                      onCheckedChange={(checked) => handleSelectProduct(product.id, checked as boolean)}
-                                    />
-                                  </TableCell>
-                                  <TableCell>
-                                    <div className="flex items-center space-x-3">
-                                      <img
-                                        src={product.image || '/images/DefaultImage.jpg'}
+                  <TableBody>
+                    {filteredProducts.map((product) => {
+                      const stockStatus = getStockStatus(product.stock);
+                      return (
+                        <TableRow key={product.id}>
+                          <TableCell>
+                            <Checkbox
+                              checked={selectedProducts.includes(product.id)}
+                              onCheckedChange={(checked) => handleSelectProduct(product.id, checked as boolean)}
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center space-x-3">
+                              <img
+                                src={product.image || '/images/DefaultImage.jpg'}
                                 alt={product.name}
                                 className="w-10 h-10 rounded-lg object-cover"
                                 loading="lazy"
@@ -581,14 +525,9 @@ const ProductDashboard: React.FC<DashboardProps> = ({ onLogout }) => {
                             </div>
                           </TableCell>
                         </TableRow>
-                              )}
-                            </Draggable>
-                          );
-                        })}
-                        {provided.placeholder}
-                      </TableBody>
-                    )}
-                  </Droppable>
+                      );
+                    })}
+                  </TableBody>
                 </Table>
 
                 {filteredProducts.length === 0 && (
@@ -639,7 +578,6 @@ const ProductDashboard: React.FC<DashboardProps> = ({ onLogout }) => {
         onSave={handleSaveProduct}
       />
     </div>
-    </DragDropContext>
   );
 };
 

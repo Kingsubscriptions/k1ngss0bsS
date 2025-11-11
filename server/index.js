@@ -6,10 +6,7 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { supabase } from './lib/supabase.js';
 import adminRoutes from './routes/admin.js';
-import authRoutes from './routes/auth.js';
-import giveawayRoutes from './routes/giveaways.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,38 +14,38 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Initialize data from Supabase
-const initializeSupabaseData = async () => {
-  const { data: settings, error: settingsError } = await supabase
-    .from('settings')
-    .select('*');
+// Simple file-based storage for testing
+const SETTINGS_FILE = path.join(__dirname, 'settings.json');
 
-  if (settingsError) {
-    throw new Error(`Error fetching settings: ${settingsError.message}`);
+// Initialize storage
+const initializeStorage = () => {
+  if (!fs.existsSync(SETTINGS_FILE)) {
+    const defaultSettings = {
+      admin_password: bcrypt.hashSync('KingSubsAdmin2025!', 10),
+      whatsappNumber: '+923276847960',
+      whatsappDirectOrder: false,
+      enablePurchaseNotifications: true,
+      enableFloatingCart: true,
+      showDiscountBadges: true,
+      showBreadcrumbs: true,
+      popupSettings: {
+        enabled: true,
+        title: 'Limited Time Offer',
+        message: 'Get 10% off when you order on WhatsApp within the next 10 minutes.',
+        buttonText: 'Order on WhatsApp',
+        buttonHref: 'https://wa.me/923276847960?text=I%20want%20to%20claim%20the%20limited%20time%20offer',
+        showTimer: true,
+        timerDuration: 10,
+        trigger: 'delay',
+        delaySeconds: 6,
+        frequency: 'once-per-session',
+        theme: 'dark',
+        pages: ['/', '/tools', '/product/:id']
+      }
+    };
+    fs.writeFileSync(SETTINGS_FILE, JSON.stringify(defaultSettings, null, 2));
   }
-
-  const { data: products, error: productsError } = await supabase
-    .from('products')
-    .select('*');
-
-  if (productsError) {
-    throw new Error(`Error fetching products: ${productsError.message}`);
-  }
-
-  const appData = {
-    settings: settings.reduce((acc, setting) => {
-      acc[setting.key] = setting.value;
-      return acc;
-    }, {}),
-    products,
-  };
-
-  // Hash the admin password if it exists and is not already hashed
-  if (appData.settings.admin_password && !appData.settings.admin_password.startsWith('$2a')) {
-    appData.settings.admin_password = bcrypt.hashSync(appData.settings.admin_password, 10);
-  }
-
-  return appData;
+  return JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf8'));
 };
 
 // Middleware
@@ -75,8 +72,6 @@ const upload = multer({ storage });
 
 // Routes
 app.use('/api/admin', adminRoutes);
-app.use('/api/auth', authRoutes);
-app.use('/api/giveaways', giveawayRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'Server is running', timestamp: new Date().toISOString() });
@@ -94,6 +89,47 @@ app.post('/api/upload', upload.single('file'), (req, res) => {
     originalname: req.file.originalname,
     path: `/uploads/${req.file.filename}`
   });
+});
+
+// Products API endpoints
+let products = [
+  {
+    id: 1,
+    name: 'Premium Digital Tool',
+    price: 29.99,
+    description: 'High-quality digital tool for professionals',
+    category: 'Tools',
+    image: '/images/product1.jpg'
+  },
+  {
+    id: 2,
+    name: 'Advanced Software Suite',
+    price: 49.99,
+    description: 'Complete software solution for businesses',
+    category: 'Software',
+    image: '/images/product2.jpg'
+  }
+];
+
+app.get('/api/products', (req, res) => {
+  res.json(products);
+});
+
+app.get('/api/products/:id', (req, res) => {
+  const product = products.find(p => p.id === parseInt(req.params.id));
+  if (!product) {
+    return res.status(404).json({ error: 'Product not found' });
+  }
+  res.json(product);
+});
+
+app.post('/api/products', (req, res) => {
+  const newProduct = {
+    id: products.length + 1,
+    ...req.body
+  };
+  products.push(newProduct);
+  res.status(201).json(newProduct);
 });
 
 // Analytics endpoints
@@ -122,15 +158,14 @@ app.use((err, req, res, next) => {
 });
 
 // Start server with storage initialization
-const startServer = async () => {
+const startServer = () => {
   try {
-    const appData = await initializeSupabaseData();
-    app.locals.settings = appData.settings;
-    app.locals.products = appData.products;
+    const settings = initializeStorage();
+    app.locals.settings = settings;
 
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
-      console.log(`Data initialized from Supabase`);
+      console.log(`File-based storage initialized`);
     });
   } catch (error) {
     console.error('Failed to start server:', error);

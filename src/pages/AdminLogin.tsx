@@ -34,7 +34,10 @@ const AdminLogin: React.FC = () => {
 
       if (response.ok && data.token) {
         // Use AuthContext to handle login
-        login(data.token, '/admin/dashboard');
+        login(data.token);
+
+        // Redirect to admin dashboard
+        navigate('/admin/dashboard');
       } else {
         setError(data.error || 'Login failed');
       }

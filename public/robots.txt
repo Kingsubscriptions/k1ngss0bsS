@@ -1,9 +1,0 @@
-# Allow all user agents to crawl the site
-User-agent: *
-Allow: /
-
-# Disallow crawling of the admin section
-Disallow: /admin
-
-# Specify the location of the sitemap
-Sitemap: https://k1ngss0bs-s.vercel.app/sitemap.xml

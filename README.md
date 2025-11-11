@@ -1,28 +1,61 @@
-# King Subscription
+# Shadcn-UI Template Usage Instructions
 
-## Overview
+## technology stack
 
-King Subscription is the ultimate destination for accessing premium digital products at unbeatable prices. Our platform offers a curated selection of popular subscriptions, from streaming services and productivity tools to educational courses and creative software. We are committed to providing a seamless and secure shopping experience, backed by our dedicated 24/7 customer support.
+This project is built with:
 
-## Key Features
+- Vite
+- TypeScript
+- React
+- shadcn-ui
+- Tailwind CSS
 
-*   **Wide Range of Products:** Access a diverse catalog of digital subscriptions, including Netflix, Spotify, Adobe Creative Cloud, and more.
-*   **Competitive Pricing:** Enjoy significant savings with our discounted rates, making premium services accessible to everyone.
-*   **Instant Delivery:** Get immediate access to your purchased subscriptions, ensuring a hassle-free experience.
-*   **Secure Transactions:** Our platform uses industry-standard security measures to protect your personal and payment information.
-*   **24/7 Customer Support:** Our dedicated support team is always available to assist you with any questions or concerns.
+All shadcn/ui components have been downloaded under `@/components/ui`.
 
-## King Subscriptions
+## File Structure
 
-At King Subscription, we specialize in providing legitimate, long-term subscriptions to a variety of digital services. Whether you're looking for entertainment, productivity, or learning tools, we have a subscription that fits your needs. Our goal is to make premium services affordable and accessible to a wider audience. We handle the procurement of these subscriptions and pass the savings on to you.
+- `index.html` - HTML entry point
+- `vite.config.ts` - Vite configuration file
+- `tailwind.config.js` - Tailwind CSS configuration file
+- `package.json` - NPM dependencies and scripts
+- `src/app.tsx` - Root component of the project
+- `src/main.tsx` - Project entry point
+- `src/index.css` - Existing CSS configuration
 
-## Getting Started
+## Components
 
-### For Customers
+- All shadcn/ui components are pre-downloaded and available at `@/components/ui`
 
-To get started with King Subscription, follow these simple steps:
+## Styling
 
-1.  **Browse Our Catalog:** Explore our extensive collection of digital products and find the subscriptions that best suit your needs.
-2.  **Add to Cart:** Select the products you wish to purchase and add them to your cart.
-3.  **Checkout:** Complete the checkout process by providing your payment and contact information.
-4.  **Instant Access:** Once your order is confirmed, you will receive immediate access to your purchased subscriptions.
+- Add global styles to `src/index.css` or create new CSS files as needed
+- Use Tailwind classes for styling components
+
+## Development
+
+- Import components from `@/components/ui` in your React components
+- Customize the UI by modifying the Tailwind configuration
+
+## Note
+
+The `@/` path alias points to the `src/` directory
+
+# Commands
+
+**Install Dependencies**
+
+```shell
+pnpm i
+```
+
+**Start Preview**
+
+```shell
+pnpm run dev
+```
+
+**To build**
+
+```shell
+pnpm run build
+```

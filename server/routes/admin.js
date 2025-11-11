@@ -1,7 +1,12 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { supabase } from '../lib/supabase.js';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const router = express.Router();
 
@@ -60,27 +65,20 @@ router.get('/settings', (req, res) => {
 });
 
 // Update admin settings
-router.post('/settings', verifyAdmin, async (req, res) => {
+router.post('/settings', (req, res) => {
   try {
     const newSettings = req.body;
+    const currentSettings = req.app.locals.settings;
 
-    for (const key in newSettings) {
-      if (Object.hasOwnProperty.call(newSettings, key)) {
-        const value = newSettings[key];
+    // Update settings
+    const updatedSettings = { ...currentSettings, ...newSettings };
 
-        const { error } = await supabase
-          .from('settings')
-          .update({ value })
-          .eq('key', key);
-
-        if (error) {
-          throw new Error(`Failed to update setting: ${key}. ${error.message}`);
-        }
-      }
-    }
+    // Save to file
+    const settingsFile = path.join(__dirname, 'settings.json');
+    fs.writeFileSync(settingsFile, JSON.stringify(updatedSettings, null, 2));
 
     // Update in memory
-    req.app.locals.settings = { ...req.app.locals.settings, ...newSettings };
+    req.app.locals.settings = updatedSettings;
 
     res.json({ message: 'Settings updated successfully' });
   } catch (error) {
@@ -91,7 +89,25 @@ router.post('/settings', verifyAdmin, async (req, res) => {
 // Get products
 router.get('/products', (req, res) => {
   try {
-    const products = req.app.locals.products || [];
+    const settings = req.app.locals.settings;
+    const products = settings.products || [
+      {
+        id: 1,
+        name: 'Premium Digital Tool',
+        price: 29.99,
+        description: 'High-quality digital tool for professionals',
+        category: 'Tools',
+        image: '/images/product1.jpg'
+      },
+      {
+        id: 2,
+        name: 'Advanced Software Suite',
+        price: 49.99,
+        description: 'Complete software solution for businesses',
+        category: 'Software',
+        image: '/images/product2.jpg'
+      }
+    ];
     res.json(products);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -99,21 +115,20 @@ router.get('/products', (req, res) => {
 });
 
 // Update products
-router.post('/products', verifyAdmin, async (req, res) => {
+router.post('/products', (req, res) => {
   try {
     const newProducts = req.body;
+    const currentSettings = req.app.locals.settings;
 
-    // Upsert products into the database
-    const { data, error } = await supabase
-      .from('products')
-      .upsert(newProducts, { onConflict: 'id' });
+    // Update products in settings
+    const updatedSettings = { ...currentSettings, products: newProducts };
 
-    if (error) {
-      throw new Error(`Failed to update products: ${error.message}`);
-    }
+    // Save to file
+    const settingsFile = path.join(__dirname, 'settings.json');
+    fs.writeFileSync(settingsFile, JSON.stringify(updatedSettings, null, 2));
 
     // Update in memory
-    req.app.locals.products = newProducts;
+    req.app.locals.settings = updatedSettings;
 
     res.json({ message: 'Products updated successfully' });
   } catch (error) {
