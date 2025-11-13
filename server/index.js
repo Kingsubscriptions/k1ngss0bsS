@@ -97,22 +97,25 @@ app.post('/api/upload', upload.single('file'), (req, res) => {
 });
 
 // Analytics endpoints
-app.get('/api/analytics/dashboard', (req, res) => {
-  const analytics = {
-    totalSales: 15420,
-    totalOrders: 342,
-    totalCustomers: 1250,
-    conversionRate: 3.2,
-    salesData: [
-      { month: 'Jan', sales: 1200 },
-      { month: 'Feb', sales: 1800 },
-      { month: 'Mar', sales: 1600 },
-      { month: 'Apr', sales: 2200 },
-      { month: 'May', sales: 2800 },
-      { month: 'Jun', sales: 3200 }
-    ]
-  };
-  res.json(analytics);
+app.get('/api/analytics/dashboard', async (req, res) => {
+  try {
+    const { data, error } = await supabase.from('analytics_overview').select('*');
+    if (error) throw error;
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch analytics data' });
+  }
+});
+
+// Blog endpoint
+app.get('/api/blog', async (req, res) => {
+  try {
+    const { data, error } = await supabase.from('blogs').select('*');
+    if (error) throw error;
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch blog posts' });
+  }
 });
 
 // Error handling middleware

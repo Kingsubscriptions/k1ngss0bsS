@@ -29,8 +29,8 @@ const verifyAdmin = (req, res, next) => {
   next();
 };
 
-// Get all giveaway accounts (admin only)
-router.get('/', verifyUser, verifyAdmin, async (req, res) => {
+// Get all giveaway accounts (authenticated users)
+router.get('/', verifyUser, async (req, res) => {
   try {
     const { data, error } = await supabase
       .from('free_giveaways')
