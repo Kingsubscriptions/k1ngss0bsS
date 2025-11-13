@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import adminRoutes from './routes/admin.js';
+import giveawayRoutes from './routes/giveaways.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -72,6 +73,7 @@ const upload = multer({ storage });
 
 // Routes
 app.use('/api/admin', adminRoutes);
+app.use('/api/giveaways', giveawayRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'Server is running', timestamp: new Date().toISOString() });
