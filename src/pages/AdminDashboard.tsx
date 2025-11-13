@@ -45,6 +45,10 @@ import { useAdminSettings } from '@/context/AdminSettingsContext';
 import { useStaticPages } from '@/context/StaticPagesContext';
 import { useGiveaway } from '@/context/GiveawayContext';
 import StaticPagesEditor from '@/components/StaticPagesEditor';
+import CategoryManagement from '@/components/CategoryManagement';
+import CommerceManagement from '@/components/CommerceManagement';
+import ReviewManagement from '@/components/ReviewManagement';
+import SiteContentManagement from '@/components/SiteContentManagement';
 
 type BlogFormState = {
   title: string;
@@ -414,70 +418,39 @@ const AdminDashboard: React.FC = () => {
   }, [activeSeoPage]);
 
 
-    const analytics = useMemo(() => {
-    const totalProducts = products.length;
-    const categorySet = new Set<string>();
-    let totalOriginal = 0;
-    let totalCurrent = 0;
-    let discountAccumulator = 0;
-    let discountCount = 0;
+  const [analytics, setAnalytics] = useState({
+    totalProducts: 0,
+    categories: [],
+    publishedBlogPosts: 0,
+    draftBlogPosts: 0,
+    averageDiscount: 0,
+    totalSavings: 0,
+    popupMetrics: { impressions: 0, clicks: 0, dismissals: 0 },
+    popupConversion: 0,
+    topProducts: [],
+  });
+  const [analyticsLoading, setAnalyticsLoading] = useState(true);
+  const [analyticsError, setAnalyticsError] = useState<string | null>(null);
 
-    const productSummaries = products.map((product) => {
-      const categories = product.category.split(',').map((item) => item.trim()).filter(Boolean);
-      categories.forEach((entry) => categorySet.add(entry));
-
-      const price = product.price || {};
-      const current = price.monthly ?? price.yearly ?? 0;
-      const original = price.original ?? current;
-      if (original > 0 && current > 0) {
-        totalOriginal += original;
-        totalCurrent += current;
-        const discountPct = Math.max(0, Math.round(((original - current) / original) * 100));
-        discountAccumulator += discountPct;
-        discountCount += 1;
-        return {
-          id: product.id,
-          name: product.name,
-          discount: discountPct,
-          savings: Math.max(original - current, 0),
-          currentPrice: current,
-        };
+  useEffect(() => {
+    const fetchAnalyticsData = async () => {
+      setAnalyticsLoading(true);
+      setAnalyticsError(null);
+      try {
+        const response = await fetch('/api/analytics/dashboard');
+        if (!response.ok) {
+          throw new Error('Failed to fetch analytics data');
+        }
+        const data = await response.json();
+        setAnalytics(data[0] || analytics);
+      } catch (error) {
+        setAnalyticsError('Failed to load analytics data');
+      } finally {
+        setAnalyticsLoading(false);
       }
-
-      return {
-        id: product.id,
-        name: product.name,
-        discount: 0,
-        savings: 0,
-        currentPrice: current,
-      };
-    });
-
-    const topProducts = productSummaries
-      .sort((a, b) => b.discount - a.discount)
-      .slice(0, 3);
-
-    const publishedBlogPosts = blogPosts.filter((post) => post.published).length;
-    const draftBlogPosts = blogPosts.length - publishedBlogPosts;
-    const averageDiscount = discountCount ? Math.round(discountAccumulator / discountCount) : 0;
-    const totalSavings = Math.max(totalOriginal - totalCurrent, 0);
-    const popupMetrics = popupSettings.metrics;
-    const popupConversion = popupMetrics.impressions > 0
-      ? Math.round((popupMetrics.clicks / popupMetrics.impressions) * 100)
-      : 0;
-
-    return {
-      totalProducts,
-      categories: Array.from(categorySet),
-      publishedBlogPosts,
-      draftBlogPosts,
-      averageDiscount,
-      totalSavings,
-      popupMetrics,
-      popupConversion,
-      topProducts,
     };
-  }, [blogPosts, popupSettings.metrics, products]);
+    fetchAnalyticsData();
+  }, []);
 
   const handleSaveSettings = async () => {
     try {
@@ -1810,188 +1783,22 @@ const AdminDashboard: React.FC = () => {
 
           {/* Product Categories Tab */}
           <TabsContent value="categories" className="space-y-6">
-            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-              <div>
-                <h2 className="text-2xl font-bold">Product Categories</h2>
-                <p className="text-sm text-muted-foreground">Organize your products into categories for better navigation.</p>
-              </div>
-              <Button onClick={() => {
-                const name = prompt('Enter category name:');
-                if (name?.trim()) {
-                  // This would open a form in a real implementation
-                  alert('Category creation form would open here');
-                }
-              }}>
-                <Plus className="mr-2 h-4 w-4" />
-                Add Category
-              </Button>
-            </div>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Categories</CardTitle>
-                <p className="text-sm text-muted-foreground">Manage product categories and their hierarchy.</p>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-8 text-muted-foreground">
-                  <PenTool className="mx-auto h-12 w-12 mb-4" />
-                  <p>Product Categories management interface would be implemented here.</p>
-                  <p className="text-sm mt-2">Features: Create, edit, delete categories, set hierarchy, manage SEO.</p>
-                </div>
-              </CardContent>
-            </Card>
+            <CategoryManagement />
           </TabsContent>
 
           {/* Reviews Tab */}
           <TabsContent value="reviews" className="space-y-6">
-            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-              <div>
-                <h2 className="text-2xl font-bold">Review Management</h2>
-                <p className="text-sm text-muted-foreground">Manage customer reviews and testimonials.</p>
-              </div>
-            </div>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Customer Reviews</CardTitle>
-                <p className="text-sm text-muted-foreground">Moderate and manage product reviews from customers.</p>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-8 text-muted-foreground">
-                  <MessageSquare className="mx-auto h-12 w-12 mb-4" />
-                  <p>Review management interface would be implemented here.</p>
-                  <p className="text-sm mt-2">Features: View reviews, approve/reject, mark as featured, respond to reviews.</p>
-                </div>
-              </CardContent>
-            </Card>
+            <ReviewManagement />
           </TabsContent>
 
           {/* Commerce Tab */}
           <TabsContent value="commerce" className="space-y-6">
-            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-              <div>
-                <h2 className="text-2xl font-bold">Commerce Settings</h2>
-                <p className="text-sm text-muted-foreground">Configure payment methods, shipping options, inventory, and coupons.</p>
-              </div>
-            </div>
-
-            <div className="grid gap-6 md:grid-cols-2">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Payment Methods</CardTitle>
-                  <p className="text-sm text-muted-foreground">Configure available payment options.</p>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-center py-6 text-muted-foreground">
-                    <DollarSign className="mx-auto h-8 w-8 mb-2" />
-                    <p className="text-sm">Payment methods configuration</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Shipping Options</CardTitle>
-                  <p className="text-sm text-muted-foreground">Set up delivery methods and rates.</p>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-center py-6 text-muted-foreground">
-                    <Package className="mx-auto h-8 w-8 mb-2" />
-                    <p className="text-sm">Shipping options management</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Inventory Management</CardTitle>
-                  <p className="text-sm text-muted-foreground">Track stock levels and manage inventory.</p>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-center py-6 text-muted-foreground">
-                    <BarChart className="mx-auto h-8 w-8 mb-2" />
-                    <p className="text-sm">Inventory tracking and alerts</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Coupon Management</CardTitle>
-                  <p className="text-sm text-muted-foreground">Create and manage discount codes.</p>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-center py-6 text-muted-foreground">
-                    <Crown className="mx-auto h-8 w-8 mb-2" />
-                    <p className="text-sm">Discount codes and promotions</p>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+            <CommerceManagement />
           </TabsContent>
 
           {/* Content Tab */}
           <TabsContent value="content" className="space-y-6">
-            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-              <div>
-                <h2 className="text-2xl font-bold">Content Management</h2>
-                <p className="text-sm text-muted-foreground">Manage SEO meta tags, social media links, footer content, and navigation menus.</p>
-              </div>
-            </div>
-
-            <div className="grid gap-6 md:grid-cols-2">
-              <Card>
-                <CardHeader>
-                  <CardTitle>SEO Meta Tags</CardTitle>
-                  <p className="text-sm text-muted-foreground">Optimize pages for search engines.</p>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-center py-6 text-muted-foreground">
-                    <Globe className="mx-auto h-8 w-8 mb-2" />
-                    <p className="text-sm">Meta tags and structured data</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Social Media Links</CardTitle>
-                  <p className="text-sm text-muted-foreground">Manage social media profiles and links.</p>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-center py-6 text-muted-foreground">
-                    <Users className="mx-auto h-8 w-8 mb-2" />
-                    <p className="text-sm">Social media integration</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Footer Content</CardTitle>
-                  <p className="text-sm text-muted-foreground">Customize footer sections and links.</p>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-center py-6 text-muted-foreground">
-                    <FilePlus2 className="mx-auto h-8 w-8 mb-2" />
-                    <p className="text-sm">Footer customization</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Navigation Menus</CardTitle>
-                  <p className="text-sm text-muted-foreground">Build and manage site navigation.</p>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-center py-6 text-muted-foreground">
-                    <PenTool className="mx-auto h-8 w-8 mb-2" />
-                    <p className="text-sm">Menu builder and navigation</p>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+            <SiteContentManagement />
           </TabsContent>
         </Tabs>
       </div>

@@ -18,8 +18,6 @@ At King Subscription, we specialize in providing legitimate, long-term subscript
 
 ## Getting Started
 
-### For Customers
-
 To get started with King Subscription, follow these simple steps:
 
 1.  **Browse Our Catalog:** Explore our extensive collection of digital products and find the subscriptions that best suit your needs.

@@ -33,6 +33,10 @@ import { SocialMediaLinksProvider } from '@/context/SocialMediaLinksContext';
 import { FooterContentProvider } from '@/context/FooterContentContext';
 import { NavigationMenusProvider } from '@/context/NavigationMenusContext';
 import { GiveawayProvider } from '@/context/GiveawayContext';
+import { CategoriesProvider } from '@/context/CategoriesContext';
+import { CommerceProvider } from '@/context/CommerceContext';
+import { ReviewsProvider } from '@/context/ReviewsContext';
+import { SiteContentProvider } from '@/context/SiteContentContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
@@ -150,6 +154,10 @@ const App = () => (
                         <FooterContentProvider>
                         <NavigationMenusProvider>
                         <GiveawayProvider>
+                        <CategoriesProvider>
+                        <CommerceProvider>
+                        <ReviewsProvider>
+                        <SiteContentProvider>
                         <TooltipProvider>
                       <SecurityHeaders />
                       <SEOHead />
@@ -198,6 +206,10 @@ const App = () => (
                         <FloatingCart />
                       </div>
                         </TooltipProvider>
+                        </SiteContentProvider>
+                        </ReviewsProvider>
+                        </CommerceProvider>
+                        </CategoriesProvider>
                         </GiveawayProvider>
                         </NavigationMenusProvider>
                         </FooterContentProvider>
