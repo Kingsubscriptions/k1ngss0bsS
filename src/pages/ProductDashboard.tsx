@@ -240,7 +240,13 @@ const ProductDashboard: React.FC<DashboardProps> = ({ onLogout }) => {
     const [removed] = reorderedProducts.splice(source.index, 1);
     reorderedProducts.splice(destination.index, 0, removed);
 
-    setProductsContext(reorderedProducts);
+    // Add the new order to each product
+    const productsWithOrder = reorderedProducts.map((product, index) => ({
+      ...product,
+      ordering: index,
+    }));
+
+    setProductsContext(productsWithOrder);
 
     try {
       const token = localStorage.getItem('adminToken');
@@ -257,7 +263,7 @@ const ProductDashboard: React.FC<DashboardProps> = ({ onLogout }) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(reorderedProducts),
+        body: JSON.stringify(productsWithOrder),
       });
 
       if (!response.ok) {

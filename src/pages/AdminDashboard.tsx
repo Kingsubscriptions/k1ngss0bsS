@@ -47,6 +47,7 @@ import { useGiveaway } from '@/context/GiveawayContext';
 import StaticPagesEditor from '@/components/StaticPagesEditor';
 import ProductForm from './ProductForm';
 import { Product } from '@/data/products';
+import GiveawayManagement from '@/components/GiveawayManagement';
 
 type BlogFormState = {
   title: string;
@@ -1681,81 +1682,7 @@ const AdminDashboard: React.FC = () => {
 
           {/* Giveaway Tab */}
           <TabsContent value="giveaway" className="space-y-6">
-            <div className="grid gap-6 lg:grid-cols-[1.5fr,2fr]">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Plus className="h-5 w-5" />
-                    Add Giveaway Account
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {giveawayMessage && (
-                    <div className="mb-4 rounded-md border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-700 dark:border-green-900/40 dark:bg-green-900/20 dark:text-green-300">
-                      {giveawayMessage}
-                    </div>
-                  )}
-                  <form className="space-y-4" onSubmit={handleGiveawaySubmit}>
-                    <div className="grid gap-2">
-                      <Label htmlFor="giveaway_email">Email</Label>
-                      <Input
-                        id="giveaway_email"
-                        type="email"
-                        value={giveawayForm.email}
-                        onChange={(e) => setGiveawayForm({ ...giveawayForm, email: e.target.value })}
-                        placeholder="user@example.com"
-                        required
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="giveaway_password">Password</Label>
-                      <Input
-                        id="giveaway_password"
-                        type="password"
-                        value={giveawayForm.password}
-                        onChange={(e) => setGiveawayForm({ ...giveawayForm, password: e.target.value })}
-                        placeholder="••••••••"
-                        required
-                      />
-                    </div>
-                    <Button type="submit" disabled={giveawayLoading}>
-                      {giveawayLoading ? 'Adding...' : 'Add Account'}
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Available Accounts</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  {giveawayLoading ? (
-                    <p>Loading accounts...</p>
-                  ) : giveawayAccounts.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">No accounts available for giveaway.</p>
-                  ) : (
-                    <div className="space-y-3">
-                      {giveawayAccounts.map((account) => (
-                        <div key={account.id} className="rounded-lg border bg-card/60 p-3 shadow-sm">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="font-semibold text-sm">{account.email}</p>
-                              <Badge variant={account.is_claimed ? 'secondary' : 'default'}>
-                                {account.is_claimed ? 'Claimed' : 'Available'}
-                              </Badge>
-                            </div>
-                            <Button size="sm" variant="destructive" onClick={() => handleDeleteGiveaway(account.id)}>
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </div>
+            <GiveawayManagement />
           </TabsContent>
 
 
