@@ -10,6 +10,7 @@ import { supabase } from './lib/supabase.js';
 import adminRoutes from './routes/admin.js';
 import authRoutes from './routes/auth.js';
 import giveawayRoutes from './routes/giveaways.js';
+import giveawayAdminRoutes from './routes/giveaway-admin.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -29,7 +30,8 @@ const initializeSupabaseData = async () => {
 
   const { data: products, error: productsError } = await supabase
     .from('products')
-    .select('*');
+    .select('*')
+    .order('ordering', { ascending: true, nullsFirst: false });
 
   if (productsError) {
     throw new Error(`Error fetching products: ${productsError.message}`);
@@ -77,6 +79,7 @@ const upload = multer({ storage });
 app.use('/api/admin', adminRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/giveaways', giveawayRoutes);
+app.use('/api/admin/giveaways', giveawayAdminRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'Server is running', timestamp: new Date().toISOString() });

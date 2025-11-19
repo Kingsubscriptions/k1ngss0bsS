@@ -14,6 +14,7 @@ import { CompareProvider } from '@/context/CompareContext';
 import { AuthProvider } from '@/context/AuthContext';
 import { SearchProvider } from '@/context/SearchContext';
 import { CustomPagesProvider } from '@/context/CustomPagesContext';
+import { GiveawayContentProvider } from './context/GiveawayContentContext';
 import { HeroProvider } from '@/context/HeroContext';
 import { SiteSettingsProvider } from '@/context/SiteSettingsContext';
 import { AdminSettingsProvider } from '@/context/AdminSettingsContext';
@@ -65,6 +66,7 @@ const CustomPage = lazy(() => import('./pages/CustomPage'));
 const Signup = lazy(() => import('./pages/Signup'));
 const Login = lazy(() => import('./pages/Login'));
 const FreeGiveaway = lazy(() => import('./pages/FreeGiveaway'));
+const PaymentPage = lazy(() => import('./pages/Payment'));
 import PurchaseNotifications from './components/PurchaseNotifications';
 import FloatingElements from './components/FloatingElements';
 import FloatingCart from './components/FloatingCart';
@@ -179,7 +181,7 @@ const App = () => (
                               <Route path="/dmca" element={<DMCA />} />
                               <Route path="/admin" element={<Admin />} />
                               <Route path="/admin/login" element={<AdminLogin />} />
-                              <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                              <Route path="/admin/dashboard" element={<GiveawayContentProvider><AdminDashboard /></GiveawayContentProvider>} />
                               <Route path="/product-controller" element={<ProductController />} />
                               <Route path="/productcontroller" element={<ProductController />} />
                               <Route path="/productdashboard" element={<ProductDashboard onLogout={() => {}} />} />
@@ -187,6 +189,7 @@ const App = () => (
                               <Route path="/signup" element={<Signup />} />
                               <Route path="/login" element={<Login />} />
                               <Route path="/free-giveaway" element={<FreeGiveaway />} />
+                              <Route path="/payment" element={<PaymentPage />} />
                               <Route path="*" element={<NotFound />} />
                             </Routes>
                           </Suspense>
