@@ -2068,6 +2068,86 @@ const AdminDashboard: React.FC = () => {
               </Card>
             </div>
           </TabsContent>
+
+          {/* Giveaway Tab */}
+          <TabsContent value="giveaway" className="space-y-6">
+            <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+              <div>
+                <h2 className="text-2xl font-bold">Giveaway Management</h2>
+                <p className="text-sm text-muted-foreground">Manage premium accounts for giveaways.</p>
+              </div>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-2">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Add New Account</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <form onSubmit={handleGiveawaySubmit} className="space-y-4">
+                    <div>
+                      <Label htmlFor="giveaway-email">Email / Username</Label>
+                      <Input
+                        id="giveaway-email"
+                        value={giveawayForm.email}
+                        onChange={(e) => setGiveawayForm({ ...giveawayForm, email: e.target.value })}
+                        placeholder="user@example.com"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="giveaway-password">Password</Label>
+                      <Input
+                        id="giveaway-password"
+                        value={giveawayForm.password}
+                        onChange={(e) => setGiveawayForm({ ...giveawayForm, password: e.target.value })}
+                        placeholder="SecurePassword123"
+                        required
+                      />
+                    </div>
+                    {giveawayMessage && (
+                      <p className={`text-sm ${giveawayMessage.includes('success') ? 'text-green-600' : 'text-red-600'}`}>
+                        {giveawayMessage}
+                      </p>
+                    )}
+                    <Button type="submit" className="w-full" disabled={giveawayLoading}>
+                      {giveawayLoading ? 'Adding...' : 'Add Account'}
+                    </Button>
+                  </form>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Active Giveaways</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {giveawayAccounts.length === 0 ? (
+                      <p className="text-center text-muted-foreground py-8">No active giveaway accounts.</p>
+                    ) : (
+                      giveawayAccounts.map((account) => (
+                        <div key={account.id} className="flex items-center justify-between p-3 border rounded-lg">
+                          <div className="overflow-hidden mr-4">
+                            <p className="font-medium truncate">{account.email}</p>
+                            <p className="text-xs text-muted-foreground truncate">{account.password}</p>
+                          </div>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => handleDeleteGiveaway(account.id)}
+                            disabled={giveawayLoading}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
         </Tabs>
       </div>
       <ProductForm

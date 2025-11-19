@@ -1,86 +1,149 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { useProductsContext } from '@/context/ProductsContext';
-import { Product } from '@/data/products';
-import ProductCard from '@/components/ProductCard';
-
-interface FreeGiveawayAccount {
-  id: string;
-  product_name: string;
-  login_details: string;
-  notes: string;
-}
+import { useGiveaway } from '@/context/GiveawayContext';
+import { useAuth } from '@/context/AuthContext';
+import { Link } from 'react-router-dom';
+import { Copy, Eye, EyeOff, Gift, Lock } from 'lucide-react';
+import { toast } from 'sonner';
 
 const FreeGiveaway: React.FC = () => {
-  const [giveawayAccounts, setGiveawayAccounts] = useState<FreeGiveawayAccount[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const { products } = useProductsContext();
+  const { accounts, isLoading, error } = useGiveaway();
+  const { isAuthenticated } = useAuth();
+  const [visiblePasswords, setVisiblePasswords] = useState<Record<number, boolean>>({});
 
-  useEffect(() => {
-    const fetchGiveawayAccounts = async () => {
-      try {
-        // For public giveaway page, we'll show a message instead of actual accounts
-        // The actual giveaway accounts are only accessible to admins
-        setGiveawayAccounts([]);
-        setError('');
-      } catch (err: any) {
-        setError('Giveaway accounts are currently unavailable. Please check back later.');
-      } finally {
-        setLoading(false);
-      }
-    };
+  const togglePassword = (id: number) => {
+    setVisiblePasswords(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
 
-    fetchGiveawayAccounts();
-  }, []);
+  const copyToClipboard = (text: string, label: string) => {
+    navigator.clipboard.writeText(text);
+    toast.success(`${label} copied to clipboard!`);
+  };
 
-  const recommendedProducts = products.slice(0, 3);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div className="text-red-600">{error}</div>;
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen py-12">
+    <div className="min-h-screen py-12 bg-background">
       <div className="container mx-auto px-4">
-        <h1 className="text-4xl font-bold text-center mb-8">Free Giveaway!</h1>
-        <p className="text-lg text-center text-muted-foreground mb-12">
-          Win amazing premium accounts! Enter our giveaway for a chance to get free access to top streaming services, software tools, and more.
-        </p>
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+            Premium Giveaways
+          </h1>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            Exclusive premium accounts for our community members.
+            Login to access Netflix, Spotify, and more for free!
+          </p>
+        </div>
 
-        {/* Giveaway Information Card */}
-        <div className="max-w-2xl mx-auto mb-16">
-          <Card className="text-center">
-            <CardHeader>
-              <CardTitle className="text-2xl">How to Enter</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-muted-foreground">
-                Follow us on social media and tag friends to enter our weekly giveaway!
+        {!isAuthenticated ? (
+          <Card className="max-w-md mx-auto text-center border-2 border-primary/20">
+            <CardContent className="p-8">
+              <Lock className="h-16 w-16 mx-auto text-primary mb-6" />
+              <h2 className="text-2xl font-bold mb-4">Member Access Only</h2>
+              <p className="text-muted-foreground mb-8">
+                Please log in or sign up to view our active giveaways and claim your free premium account.
               </p>
-              <div className="bg-gradient-to-r from-purple-500/10 to-blue-500/10 p-6 rounded-lg">
-                <h3 className="font-semibold text-lg mb-2">Current Prize</h3>
-                <p className="text-3xl font-bold text-primary mb-2">Netflix Premium Account</p>
-                <p className="text-sm text-muted-foreground">Valid for 1 month - Full HD streaming</p>
+              <div className="flex flex-col gap-4">
+                <Link to="/login">
+                  <Button size="lg" className="w-full">Log In</Button>
+                </Link>
+                <Link to="/signup">
+                  <Button variant="outline" size="lg" className="w-full">Create Account</Button>
+                </Link>
               </div>
-              <Button className="w-full bg-green-600 hover:bg-green-700">
-                Enter Giveaway on WhatsApp
-              </Button>
             </CardContent>
           </Card>
-        </div>
+        ) : (
+          <div className="space-y-8">
+            {error && (
+              <div className="bg-destructive/10 text-destructive p-4 rounded-lg text-center">
+                {error}
+              </div>
+            )}
 
-        <h2 className="text-3xl font-bold text-center mb-8">Premium Products You Can Win</h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {recommendedProducts.map((product: Product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+            {accounts.length === 0 ? (
+              <Card className="text-center p-12">
+                <Gift className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
+                <h3 className="text-xl font-semibold mb-2">No Active Giveaways</h3>
+                <p className="text-muted-foreground">
+                  Check back later! We restock premium accounts weekly.
+                </p>
+              </Card>
+            ) : (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {accounts.map((account) => (
+                  <Card key={account.id} className="hover:shadow-lg transition-shadow border-primary/10">
+                    <CardHeader className="bg-gradient-to-r from-primary/5 to-transparent pb-4">
+                      <CardTitle className="flex items-center gap-2">
+                        <Gift className="h-5 w-5 text-primary" />
+                        Premium Account
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="p-6 space-y-4">
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium text-muted-foreground">Email / Username</label>
+                        <div className="flex gap-2">
+                          <code className="flex-1 bg-muted p-2 rounded border text-sm font-mono truncate">
+                            {account.email}
+                          </code>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => copyToClipboard(account.email, 'Email')}
+                          >
+                            <Copy className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium text-muted-foreground">Password</label>
+                        <div className="flex gap-2">
+                          <code className="flex-1 bg-muted p-2 rounded border text-sm font-mono truncate">
+                            {visiblePasswords[account.id] ? account.password : '••••••••••••'}
+                          </code>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => togglePassword(account.id)}
+                          >
+                            {visiblePasswords[account.id] ? (
+                              <EyeOff className="h-4 w-4" />
+                            ) : (
+                              <Eye className="h-4 w-4" />
+                            )}
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => copyToClipboard(account.password || '', 'Password')}
+                            disabled={!account.password}
+                          >
+                            <Copy className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+
+                      <div className="pt-4 text-xs text-center text-muted-foreground">
+                        Posted: {new Date(account.created_at).toLocaleDateString()}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
