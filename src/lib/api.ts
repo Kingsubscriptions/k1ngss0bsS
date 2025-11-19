@@ -2,7 +2,7 @@ import { Product } from '@/data/products';
 
 const API_BASE_URL = process.env.NODE_ENV === 'production'
   ? '' // Use relative URLs for Vercel serverless functions
-  : 'http://localhost:3001'; // Backend server runs on port 3001
+  : 'http://localhost:3002'; // Backend server runs on port 3002
 
 // Cross-browser sync utility using BroadcastChannel and localStorage
 class CrossBrowserSync {
@@ -245,6 +245,13 @@ class ApiClient {
     });
   }
 
+  async loginProductController(password: string): Promise<{ token: string; message: string }> {
+    return this.request<{ token: string; message: string }>('/api/admin/login/product-controller', {
+      method: 'POST',
+      body: JSON.stringify({ password }),
+    });
+  }
+
   async getProducts(): Promise<Product[]> {
     return this.request<Product[]>('/api/admin/products');
   }
@@ -253,6 +260,64 @@ class ApiClient {
     return this.request<{ message: string; warning?: string }>('/api/admin/products', {
       method: 'POST',
       body: JSON.stringify(products),
+    });
+  }
+
+  async addProduct(product: Product): Promise<{ message: string; product: Product }> {
+    return this.request<{ message: string; product: Product }>('/api/admin/products/add', {
+      method: 'POST',
+      body: JSON.stringify(product),
+    });
+  }
+
+  async updateProduct(product: Product): Promise<{ message: string; product: Product }> {
+    return this.request<{ message: string; product: Product }>(`/api/admin/products/${product.id}`, {
+      method: 'PUT',
+      body: JSON.stringify(product),
+    });
+  }
+
+  async deleteProduct(productId: string): Promise<{ message: string }> {
+    return this.request<{ message: string }>(`/api/admin/products/${productId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // Auth
+  async verifyToken(token: string): Promise<{ valid: boolean }> {
+    try {
+      await this.request('/api/admin/verify', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      return { valid: true };
+    } catch (error) {
+      return { valid: false };
+    }
+  }
+
+  async refreshToken(token: string): Promise<{ token: string }> {
+    return this.request<{ token: string }>('/api/admin/refresh', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+  }
+
+  // Giveaways
+  async getGiveaways(): Promise<any[]> {
+    return this.request<any[]>('/api/giveaways');
+  }
+
+  async addGiveaway(email: string, password?: string): Promise<any> {
+    return this.request<any>('/api/giveaways', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+    });
+  }
+
+  async deleteGiveaway(id: number): Promise<{ message: string }> {
+    return this.request<{ message: string }>(`/api/giveaways/${id}`, {
+      method: 'DELETE',
     });
   }
 }

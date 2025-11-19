@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Eye, EyeOff, Shield } from 'lucide-react';
+import { apiClient } from '@/lib/api';
 
 interface LoginProps {
   onLogin: () => void;
@@ -15,7 +16,7 @@ const LoginForm: React.FC<LoginProps> = ({ onLogin }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  
+
   // Use environment variable for password in production
   const ADMIN_PASSWORD = import.meta.env.VITE_PRODUCT_CONTROLLER_PASSWORD || 'admin123';
 
@@ -25,20 +26,22 @@ const LoginForm: React.FC<LoginProps> = ({ onLogin }) => {
     setError('');
 
     // Simulate network delay for security
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // await new Promise(resolve => setTimeout(resolve, 1000));
 
-    if (password === ADMIN_PASSWORD) {
+    try {
+      const { token } = await apiClient.loginProductController(password);
+
       // Set session in localStorage
       localStorage.setItem('productController_auth', 'authenticated');
       localStorage.setItem('productController_loginTime', Date.now().toString());
+      localStorage.setItem('admin_token', token); // Store token for API requests
       onLogin();
-    } else {
+    } catch (err) {
       setError('Invalid password. Access denied.');
     }
-
     setIsLoading(false);
   };
-  
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800 p-4">
       <Card className="w-full max-w-md mx-auto shadow-2xl border-slate-700">
@@ -81,8 +84,8 @@ const LoginForm: React.FC<LoginProps> = ({ onLogin }) => {
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="w-full bg-blue-600 hover:bg-blue-700"
               disabled={isLoading || !password}
             >
@@ -98,7 +101,7 @@ const LoginForm: React.FC<LoginProps> = ({ onLogin }) => {
 const ProductController: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   useEffect(() => {
     // Check if user is already authenticated
     const auth = localStorage.getItem('productController_auth');
@@ -115,21 +118,23 @@ const ProductController: React.FC = () => {
         // Session expired, clear auth
         localStorage.removeItem('productController_auth');
         localStorage.removeItem('productController_loginTime');
+        localStorage.removeItem('admin_token'); // Also clear token
       }
     }
     setIsLoading(false);
   }, []);
-  
+
   const handleLogin = () => {
     setIsAuthenticated(true);
   };
-  
+
   const handleLogout = () => {
     localStorage.removeItem('productController_auth');
     localStorage.removeItem('productController_loginTime');
+    localStorage.removeItem('admin_token'); // Clear token on logout
     setIsAuthenticated(false);
   };
-  
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800">
@@ -139,14 +144,14 @@ const ProductController: React.FC = () => {
       </div>
     );
   }
-  
+
   if (!isAuthenticated) {
     return <LoginForm onLogin={handleLogin} />;
   }
-  
+
   // Import Dashboard component here to avoid loading it unless authenticated
   const Dashboard = React.lazy(() => import('./ProductDashboard'));
-  
+
   return (
     <React.Suspense fallback={<div className="flex items-center justify-center min-h-screen bg-slate-900">Loading dashboard...</div>}>
       <Dashboard onLogout={handleLogout} />

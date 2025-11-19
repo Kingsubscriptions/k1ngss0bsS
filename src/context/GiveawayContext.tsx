@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useAuth } from './AuthContext';
+import { apiClient } from '@/lib/api';
 
 interface GiveawayAccount {
   id: number;
@@ -39,17 +40,7 @@ export const GiveawayProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setError(null);
 
     try {
-      const response = await fetch('/api/giveaways', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch giveaway accounts.');
-      }
-
-      const data = await response.json();
+      const data = await apiClient.getGiveaways();
       setAccounts(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred.');
@@ -69,21 +60,7 @@ export const GiveawayProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
 
     try {
-      const response = await fetch('/api/giveaways', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!response.ok) {
-        const errData = await response.json();
-        throw new Error(errData.error || 'Failed to add account.');
-      }
-
-      const newAccount = await response.json();
+      const newAccount = await apiClient.addGiveaway(email, password);
       setAccounts(prev => [newAccount, ...prev]);
       return true;
     } catch (err) {
@@ -99,17 +76,7 @@ export const GiveawayProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
 
     try {
-      const response = await fetch(`/api/giveaways/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to delete account.');
-      }
-
+      await apiClient.deleteGiveaway(id);
       setAccounts(prev => prev.filter(account => account.id !== id));
       return true;
     } catch (err) {

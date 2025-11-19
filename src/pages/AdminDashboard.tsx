@@ -45,6 +45,8 @@ import { useAdminSettings } from '@/context/AdminSettingsContext';
 import { useStaticPages } from '@/context/StaticPagesContext';
 import { useGiveaway } from '@/context/GiveawayContext';
 import StaticPagesEditor from '@/components/StaticPagesEditor';
+import ProductForm from './ProductForm';
+import { Product } from '@/data/products';
 
 type BlogFormState = {
   title: string;
@@ -73,7 +75,7 @@ const formatBlogDate = (value?: string) => {
 const AdminDashboard: React.FC = () => {
   const { logout } = useAuth();
   const { settings, updateSettings, isLoading: settingsLoading, error: settingsError } = useSettings();
-  const { products } = useProductsContext();
+  const { products, updateProduct, addProduct, deleteProduct: deleteProductContext } = useProductsContext();
   const { posts: blogPosts, createPost, updatePost, deletePost, togglePublished, categories: blogCategories } = useBlogContext();
   const { accounts: giveawayAccounts, addAccount: addGiveawayAccount, deleteAccount: deleteGiveawayAccount, isLoading: giveawayLoading, error: giveawayError } = useGiveaway();
 
@@ -112,6 +114,10 @@ const AdminDashboard: React.FC = () => {
   // Giveaway state
   const [giveawayForm, setGiveawayForm] = useState({ email: '', password: '' });
   const [giveawayMessage, setGiveawayMessage] = useState('');
+
+  // Product Management State
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [showProductForm, setShowProductForm] = useState(false);
 
   // Custom Pages handlers
   const handleResetPageForm = () => {
@@ -274,7 +280,7 @@ const AdminDashboard: React.FC = () => {
     }
   }, [adminSettings]);
 
-// Popup/Announcement Settings
+  // Popup/Announcement Settings
   const { settings: popupSettings, updateSettings: persistPopupSettings, resetSettings: resetPopupSettings, isLoading: popupLoading } = usePopup();
   const [popupDraft, setPopupDraft] = useState(popupSettings);
   const popupPagesSelected = useMemo(() => new Set(popupDraft.pages), [popupDraft.pages]);
@@ -414,7 +420,7 @@ const AdminDashboard: React.FC = () => {
   }, [activeSeoPage]);
 
 
-    const analytics = useMemo(() => {
+  const analytics = useMemo(() => {
     const totalProducts = products.length;
     const categorySet = new Set<string>();
     let totalOriginal = 0;
@@ -494,18 +500,32 @@ const AdminDashboard: React.FC = () => {
   };
 
   const handleAddProduct = () => {
-    // Navigate to add product form
-    alert('Add Product form would open here');
+    setEditingProduct(null);
+    setShowProductForm(true);
   };
 
   const handleEditProduct = (productId: string) => {
-    alert(`Edit product ${productId} form would open here`);
+    const product = products.find(p => p.id === productId);
+    if (product) {
+      setEditingProduct(product);
+      setShowProductForm(true);
+    }
   };
 
-  const handleDeleteProduct = (productId: string) => {
+  const handleDeleteProduct = async (productId: string) => {
     if (confirm('Are you sure you want to delete this product?')) {
-      alert(`Product ${productId} would be deleted`);
+      await deleteProductContext(productId);
     }
+  };
+
+  const handleSaveProduct = async (product: Product) => {
+    if (editingProduct) {
+      await updateProduct(product);
+    } else {
+      await addProduct(product);
+    }
+    setShowProductForm(false);
+    setEditingProduct(null);
   };
 
   const handleResetBlogForm = () => {
@@ -796,7 +816,7 @@ const AdminDashboard: React.FC = () => {
                     <Input
                       id="siteName"
                       value={localSiteSettings.siteName}
-                      onChange={(e) => setLocalSiteSettings({...localSiteSettings, siteName: e.target.value})}
+                      onChange={(e) => setLocalSiteSettings({ ...localSiteSettings, siteName: e.target.value })}
                     />
                   </div>
                   <div>
@@ -804,7 +824,7 @@ const AdminDashboard: React.FC = () => {
                     <Input
                       id="tagline"
                       value={localSiteSettings.tagline}
-                      onChange={(e) => setLocalSiteSettings({...localSiteSettings, tagline: e.target.value})}
+                      onChange={(e) => setLocalSiteSettings({ ...localSiteSettings, tagline: e.target.value })}
                     />
                   </div>
                   <div>
@@ -890,41 +910,96 @@ const AdminDashboard: React.FC = () => {
               </CardContent>
             </Card>
 
-                          <Card>
-                <CardHeader>
-                  <CardTitle>Site Features</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <Label>WhatsApp Direct Order</Label>
-                      <p className="text-sm text-gray-500">Skip form and open WhatsApp directly</p>
-                    </div>
-                    <Switch
-                      checked={whatsappDirectOrder}
-                      onCheckedChange={(checked) => {
-                        setWhatsappDirectOrder(checked as boolean);
-                        updateSettings({ whatsappDirectOrder: Boolean(checked) });
-                      }}
-                    />
+            <Card>
+              <CardHeader>
+                <CardTitle>Site Features</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label>WhatsApp Direct Order</Label>
+                    <p className="text-sm text-gray-500">Skip form and open WhatsApp directly</p>
                   </div>
-                </CardContent>
-              </Card>
+                  <Switch
+                    checked={whatsappDirectOrder}
+                    onCheckedChange={(checked) => {
+                      setWhatsappDirectOrder(checked as boolean);
+                      updateSettings({ whatsappDirectOrder: Boolean(checked) });
+                    }}
+                  />
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           {/* Products Management Tab */}
           <TabsContent value="products" className="space-y-6">
-            <div className="flex flex-col items-center justify-center min-h-[200px]">
-              <h2 className="text-2xl font-bold mb-4">Product Management</h2>
-              <Button
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg text-lg shadow-lg"
-                onClick={() => window.location.href = '/productcontroller'}
-              >
-                Access Product Controller
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-bold">Product Management</h2>
+              <Button onClick={handleAddProduct}>
+                <Plus className="mr-2 h-4 w-4" />
+                Add Product
               </Button>
-              <p className="mt-4 text-gray-500 text-center max-w-md">
-                Use the Product Controller for advanced product management, secure access, and full CRUD features.
-              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {products.map((product) => (
+                <Card key={product.id} className="overflow-hidden">
+                  <div className="aspect-video w-full relative">
+                    <img
+                      src={product.image || '/images/DefaultImage.jpg'}
+                      alt={product.name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = '/images/DefaultImage.jpg';
+                      }}
+                    />
+                    {product.popular && (
+                      <Badge className="absolute top-2 right-2 bg-yellow-500">Popular</Badge>
+                    )}
+                  </div>
+                  <CardHeader>
+                    <CardTitle className="flex justify-between items-start">
+                      <span className="truncate" title={product.name}>{product.name}</span>
+                      <Badge variant={product.stock ? 'default' : 'destructive'}>
+                        {product.stock ? 'In Stock' : 'Out of Stock'}
+                      </Badge>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex justify-between items-center mb-4">
+                      <span className="font-bold text-lg">
+                        {product.price.monthly ? `PKR ${product.price.monthly}/mo` : 'Free'}
+                      </span>
+                      <span className="text-sm text-gray-500">{product.category}</span>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button variant="outline" className="flex-1" onClick={() => handleEditProduct(product.id)}>
+                        <Edit className="w-4 h-4 mr-2" />
+                        Edit
+                      </Button>
+                      <Button variant="destructive" size="icon" onClick={() => handleDeleteProduct(product.id)}>
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+
+              {products.length === 0 && (
+                <div className="col-span-full text-center py-12 bg-gray-50 rounded-lg border-2 border-dashed">
+                  <Package className="mx-auto h-12 w-12 text-gray-400" />
+                  <h3 className="mt-2 text-sm font-semibold text-gray-900">No products</h3>
+                  <p className="mt-1 text-sm text-gray-500">Get started by creating a new product.</p>
+                  <div className="mt-6">
+                    <Button onClick={handleAddProduct}>
+                      <Plus className="-ml-0.5 mr-1.5 h-5 w-5" aria-hidden="true" />
+                      New Product
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
           </TabsContent>
 
@@ -1995,6 +2070,12 @@ const AdminDashboard: React.FC = () => {
           </TabsContent>
         </Tabs>
       </div>
+      <ProductForm
+        product={editingProduct}
+        isOpen={showProductForm}
+        onClose={() => setShowProductForm(false)}
+        onSave={handleSaveProduct}
+      />
     </div>
   );
 };

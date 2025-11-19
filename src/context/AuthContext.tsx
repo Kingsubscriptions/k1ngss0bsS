@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { apiClient } from '@/lib/api';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -39,14 +40,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Validate token with server
   const validateToken = async (token: string): Promise<boolean> => {
     try {
-      const response = await fetch('/api/admin/verify', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      return response.ok;
+      const { valid } = await apiClient.verifyToken(token);
+      return valid;
     } catch (error) {
       console.error('Token validation error:', error);
       return false;
@@ -85,20 +80,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Refresh token
   const refreshToken = async (): Promise<boolean> => {
     try {
-      const response = await fetch('/api/admin/refresh', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
+      if (!token) return false;
+      const data = await apiClient.refreshToken(token);
 
-      if (response.ok) {
-        const data = await response.json();
-        if (data.token) {
-          login(data.token);
-          return true;
-        }
+      if (data.token) {
+        login(data.token);
+        return true;
       }
       return false;
     } catch (error) {

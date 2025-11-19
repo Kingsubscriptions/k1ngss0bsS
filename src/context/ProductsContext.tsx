@@ -1,10 +1,12 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { products as defaultProducts, Product } from '@/data/products';
 import { ProductsService, ProductData } from '@/lib/supabase';
+import { apiClient } from '@/lib/api';
 
 type ProductsContextValue = {
   products: Product[];
   setProducts: (next: Product[]) => Promise<void>;
+  addProduct: (product: Product) => Promise<void>;
   updateProduct: (product: Product) => Promise<void>;
   deleteProduct: (productId: string) => Promise<void>;
   resetProducts: () => void;
@@ -50,7 +52,7 @@ export const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         // If no products in database, use default products and sync them
         console.log('📦 No products in database, using defaults');
         setProductsState(defaultProducts);
-        
+
         // Sync default products to database
         const dbProducts = defaultProducts.map(ProductsService.convertToDatabaseFormat);
         await ProductsService.updateProducts(dbProducts);
@@ -69,62 +71,60 @@ export const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setError(null);
 
     try {
-      const dbProducts = next.map(ProductsService.convertToDatabaseFormat);
-      const success = await ProductsService.updateProducts(dbProducts);
-
-      if (success) {
-        setProductsState(next);
-        console.log('✅ Products updated in Supabase and synced across browsers');
-      } else {
-        throw new Error('Failed to update products in database');
-      }
+      await apiClient.updateProducts(next);
+      setProductsState(next);
+      console.log('✅ Products updated via API');
     } catch (error) {
-      console.error('Failed to update products in Supabase:', error);
-      setError('Failed to save products to database. Please try again.');
-      // Don't update local state if database update fails
+      console.error('Failed to update products via API:', error);
+      setError('Failed to save products. Please try again.');
     } finally {
       setIsLoading(false);
     }
   }, []);
 
+  const addProduct = useCallback(async (product: Product) => {
+    try {
+      const { product: newProduct } = await apiClient.addProduct(product);
+
+      // Convert server response (which might be DB format) to client format if needed
+      // But apiClient returns Product type which is client format
+      setProductsState((prev) => [newProduct, ...prev]);
+      console.log('✅ Product added via API');
+    } catch (error) {
+      console.error('Failed to add product:', error);
+      setError('Failed to add product.');
+    }
+  }, []);
+
   const updateProduct = useCallback(async (product: Product) => {
     try {
-      const dbProduct = ProductsService.convertToDatabaseFormat(product);
-      const success = await ProductsService.updateProduct(dbProduct);
-      
-      if (success) {
-        setProductsState((prev) => {
-          const exists = prev.findIndex((item) => item.id === product.id);
-          if (exists === -1) {
-            return [...prev, product];
-          }
-          const next = [...prev];
-          next[exists] = product;
-          return next;
-        });
-        console.log('✅ Product updated in Supabase');
-      } else {
-        throw new Error('Failed to update product in database');
-      }
+      const { product: updatedProduct } = await apiClient.updateProduct(product);
+
+      setProductsState((prev) => {
+        const exists = prev.findIndex((item) => item.id === product.id);
+        if (exists === -1) {
+          return [...prev, updatedProduct];
+        }
+        const next = [...prev];
+        next[exists] = updatedProduct;
+        return next;
+      });
+      console.log('✅ Product updated via API');
     } catch (error) {
       console.error('Failed to update product:', error);
-      setError('Failed to update product in database.');
+      setError('Failed to update product.');
     }
   }, []);
 
   const deleteProduct = useCallback(async (productId: string) => {
     try {
-      const success = await ProductsService.deleteProduct(productId);
-      
-      if (success) {
-        setProductsState((prev) => prev.filter((item) => item.id !== productId));
-        console.log('✅ Product deleted from Supabase');
-      } else {
-        throw new Error('Failed to delete product from database');
-      }
+      await apiClient.deleteProduct(productId);
+
+      setProductsState((prev) => prev.filter((item) => item.id !== productId));
+      console.log('✅ Product deleted via API');
     } catch (error) {
       console.error('Failed to delete product:', error);
-      setError('Failed to delete product from database.');
+      setError('Failed to delete product.');
     }
   }, []);
 
@@ -136,6 +136,7 @@ export const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     () => ({
       products,
       setProducts,
+      addProduct,
       updateProduct,
       deleteProduct,
       resetProducts,
@@ -143,7 +144,7 @@ export const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       error,
       loadProducts
     }),
-    [products, setProducts, updateProduct, deleteProduct, resetProducts, isLoading, error, loadProducts],
+    [products, setProducts, addProduct, updateProduct, deleteProduct, resetProducts, isLoading, error, loadProducts],
   );
 
   return <ProductsContext.Provider value={value}>{children}</ProductsContext.Provider>;

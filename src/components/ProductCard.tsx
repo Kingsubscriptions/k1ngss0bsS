@@ -62,16 +62,16 @@ function useProductPricing(price: AnyProduct['price']) {
   return useMemo(() => {
     const current = safeNum(price?.monthly) || safeNum(price?.yearly) || 0;
     let original = safeNum(price?.original) || 0;
-    
+
     if (original > 0 && current > 0 && original <= current) {
       original = current * 1.5;
     } else if (original === 0 && current > 0) {
       original = current * 2;
     }
-    
+
     const savings = Math.max(original - current, 0);
     const discount = original > 0 ? Math.round((savings / original) * 100) : 0;
-    
+
     return { current, original, savings, discount };
   }, [price]);
 }
@@ -81,11 +81,11 @@ function useStockInfo(stock: AnyProduct['stock']) {
     const isInStock = isProductInStock(stock);
     const label = getStockLabel(stock);
     let quantity = 0;
-    
+
     if (typeof stock === 'number') {
       quantity = stock;
     }
-    
+
     return { isInStock, label, quantity };
   }, [stock]);
 }
@@ -316,16 +316,16 @@ Please send me payment details. Thank you!`;
           <div className="flex items-center p-2 gap-3">
             {/* Small Image on Left */}
             <div className="relative flex-shrink-0 w-16 h-12 rounded-md overflow-hidden bg-muted/40">
-                <OptimizedImage
-                  src={imageSrc}
-                  alt={product.name}
-                  width={64}
-                  height={48}
-                  className="w-full h-full"
-                  placeholder="/placeholder-image.jpg"
-                  onLoad={() => setImgLoading(false)}
-                  onError={() => setImgError(true)}
-                />
+              <OptimizedImage
+                src={imageSrc}
+                alt={product.name}
+                width={64}
+                height={48}
+                className="w-full h-full"
+                placeholder="/placeholder-image.jpg"
+                onLoad={() => setImgLoading(false)}
+                onError={() => setImgError(true)}
+              />
             </div>
 
             {/* Product Info - Center */}
@@ -390,7 +390,7 @@ Please send me payment details. Thank you!`;
           {/* Image Area - Smaller on Mobile */}
           <div className="relative mb-3">
             <div className={cn(
-              "w-full relative rounded-md overflow-hidden bg-muted/40 flex items-center justify-center",
+              "w-full relative rounded-md overflow-hidden bg-muted/40 flex items-center justify-center p-4",
               isMobile ? "aspect-[4/3] min-h-[120px]" : "aspect-square sm:aspect-[4/3] min-h-[200px]"
             )}>
               <OptimizedImage
@@ -408,7 +408,7 @@ Please send me payment details. Thank you!`;
                 onError={() => setImgError(true)}
               />
             </div>
-            
+
             {/* Product Badge */}
             {product.badge && (
               <div className="absolute top-1.5 left-1.5">
@@ -420,7 +420,7 @@ Please send me payment details. Thank you!`;
                 </span>
               </div>
             )}
-            
+
             {/* Verified Badge */}
             <div className="absolute top-1.5 right-1.5" role="status" aria-label="Verified Product">
               <span className={cn(
@@ -493,7 +493,7 @@ Please send me payment details. Thank you!`;
             <span className="text-muted-foreground">·</span>
             <span>{randomPurchaseCount.toLocaleString()} bought</span>
           </div>
-          
+
           {/* Features - Vertical List for Both PC and Mobile */}
           <div className={cn(
             "mb-4 space-y-2",

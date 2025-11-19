@@ -87,7 +87,7 @@ app.post('/api/upload', upload.single('file'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No file uploaded' });
   }
-  
+
   res.json({
     message: 'File uploaded successfully',
     filename: req.file.filename,
@@ -97,22 +97,64 @@ app.post('/api/upload', upload.single('file'), (req, res) => {
 });
 
 // Analytics endpoints
-app.get('/api/analytics/dashboard', (req, res) => {
-  const analytics = {
-    totalSales: 15420,
-    totalOrders: 342,
-    totalCustomers: 1250,
-    conversionRate: 3.2,
-    salesData: [
-      { month: 'Jan', sales: 1200 },
-      { month: 'Feb', sales: 1800 },
-      { month: 'Mar', sales: 1600 },
-      { month: 'Apr', sales: 2200 },
-      { month: 'May', sales: 2800 },
-      { month: 'Jun', sales: 3200 }
-    ]
-  };
-  res.json(analytics);
+// Analytics endpoints
+app.get('/api/analytics/dashboard', async (req, res) => {
+  try {
+    // Fetch real data from Supabase
+    const { count: totalOrders } = await supabase
+      .from('conversion_events')
+      .select('*', { count: 'exact', head: true });
+
+    const { count: totalCustomers } = await supabase
+      .from('user_interactions') // Assuming unique users are tracked here or in a users table
+      .select('user_id', { count: 'exact', head: true }); // This is a rough approximation
+
+    // Calculate total sales (sum of value in conversion_events)
+    const { data: salesData, error: salesError } = await supabase
+      .from('conversion_events')
+      .select('value, created_at')
+      .order('created_at', { ascending: true });
+
+    let totalSales = 0;
+    const salesByMonth = {};
+
+    if (salesData) {
+      salesData.forEach(event => {
+        totalSales += event.value || 0;
+        const month = new Date(event.created_at).toLocaleString('default', { month: 'short' });
+        salesByMonth[month] = (salesByMonth[month] || 0) + (event.value || 0);
+      });
+    }
+
+    const formattedSalesData = Object.entries(salesByMonth).map(([month, sales]) => ({
+      month,
+      sales
+    }));
+
+    // Conversion rate: orders / page_views * 100
+    const { count: totalViews } = await supabase
+      .from('page_views')
+      .select('*', { count: 'exact', head: true });
+
+    const conversionRate = totalViews ? ((totalOrders || 0) / totalViews * 100).toFixed(2) : 0;
+
+    const analytics = {
+      totalSales: totalSales || 0,
+      totalOrders: totalOrders || 0,
+      totalCustomers: totalCustomers || 0,
+      conversionRate: Number(conversionRate),
+      salesData: formattedSalesData.length > 0 ? formattedSalesData : [
+        { month: 'Jan', sales: 0 },
+        { month: 'Feb', sales: 0 },
+        { month: 'Mar', sales: 0 }
+      ]
+    };
+
+    res.json(analytics);
+  } catch (error) {
+    console.error('Error fetching analytics:', error);
+    res.status(500).json({ error: 'Failed to fetch analytics data' });
+  }
 });
 
 // Error handling middleware
