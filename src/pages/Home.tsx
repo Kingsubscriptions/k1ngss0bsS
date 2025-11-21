@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Star, 
-  Shield, 
-  Zap, 
-  Crown, 
-  Clock, 
-  Users, 
-  CheckCircle, 
+import {
+  Star,
+  Shield,
+  Zap,
+  Crown,
+  Clock,
+  Users,
+  CheckCircle,
   ArrowRight,
   TrendingUp,
   DollarSign,
@@ -104,12 +104,13 @@ const Home: React.FC = () => {
             <div className="absolute bottom-20 left-20 animate-pulse">⚡</div>
             <div className="absolute bottom-40 right-10 animate-bounce">👑</div>
           </div>
-          
+
           <div className="container mx-auto px-4 text-center relative z-10">
             <CountdownTimer />
             <h1 className="text-4xl md:text-7xl font-black mb-6 leading-tight">
               <span className="bg-gradient-to-r from-amber-500 to-orange-600 bg-clip-text text-transparent">
-                {heroSettings?.title || 'STOP SPENDING MONEY'}
+                {/* Clean the title if it contains the duplicate text, so we can render the second line in white */}
+                {(heroSettings?.title || 'STOP SPENDING MONEY').replace(/ On Overpriced (Software|Softwares)( & Services)?!?$/i, '')}
               </span>
               <br />
               <span className="text-foreground">
@@ -145,7 +146,7 @@ const Home: React.FC = () => {
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
-              <WhatsAppButton 
+              <WhatsAppButton
                 message="Hi! I want to save money on premium tools. Can you help me get started?"
                 variant="outline"
                 className="px-8 py-6 text-lg border-green-600 text-green-600 hover:bg-green-50 dark:hover:bg-green-900 dark:hover:text-green-100" // Fixed dark mode visibility
@@ -443,10 +444,10 @@ const Home: React.FC = () => {
               ⏰ Don't Let This Opportunity Slip Away
             </h2>
             <p className="text-xl mb-8 max-w-3xl mx-auto">
-              While others pay full price like suckers, <strong>smart entrepreneurs</strong> are saving thousands. 
+              While others pay full price like suckers, <strong>smart entrepreneurs</strong> are saving thousands.
               Join the elite group who refuse to overpay for software.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
               <Link to="/tools">
                 <Button size="lg" className="bg-white text-red-600 hover:bg-gray-100 px-8 py-6 text-xl font-bold shadow-xl">

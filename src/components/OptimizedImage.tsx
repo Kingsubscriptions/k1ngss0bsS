@@ -33,6 +33,10 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
 
   // Generate responsive image sources
   const generateSrcSet = (src: string) => {
+    // Temporarily disable srcSet generation as we don't have resized images
+    return '';
+
+    /* 
     if (!src) return '';
 
     // Skip responsive image generation for external URLs (like Clearbit)
@@ -50,6 +54,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       ${baseUrl}-1280w.${extension} 1280w,
       ${src} 1920w
     `.trim();
+    */
   };
 
   // Intersection Observer for lazy loading
@@ -118,9 +123,8 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           width={width}
           height={height}
           loading={priority ? 'eager' : 'lazy'}
-          className={`transition-opacity duration-300 ${
-            isLoaded ? 'opacity-100' : 'opacity-0'
-          } ${className}`}
+          className={`transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'
+            } ${className}`}
           onLoad={handleLoad}
           onError={handleError}
           style={{
@@ -185,9 +189,8 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
             height={height}
             loading={priority ? 'eager' : 'lazy'}
             decoding="async"
-            className={`transition-opacity duration-300 ${
-              isLoaded ? 'opacity-100' : 'opacity-0'
-            } ${className}`}
+            className={`transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'
+              } ${className}`}
             onLoad={handleLoad}
             onError={handleError}
             style={{

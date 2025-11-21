@@ -1523,4 +1523,1539 @@ export const categories = [
     { id: "graphics-creative", name: "Graphics/Creative", count: products.filter(p => p.category.includes("Graphics/Creative")).length },
     { id: "business", name: "Business", count: products.filter(p => p.category.includes("Business")).length },
     { id: "services", name: "Services", count: products.filter(p => p.category.includes("Services")).length },
-];
+,
+  {
+  "id": "chatgpt-plus",
+  "name": "ChatGPT Plus",
+  "category": "AI , Writting",
+  "price": {
+    "monthly": 3999,
+    "original": 5999,
+    "display": "PKR 3,999 /month"
+  },
+  "description": "Features: Advanced GPT model access, Fast responses & priority, Works across devices, Semi plan: 3–6 users (our email), Shared plan: 7–9 users. Price: PKR 3,999 /month",
+  "longDescription": "Features: Advanced GPT model access, Fast responses & priority, Works across devices, Semi plan: 3–6 users (our email), Shared plan: 7–9 users. Price: PKR 3,999 /month",
+  "features": [
+    "Advanced GPT model access",
+    "Fast responses & priority",
+    "Works across devices",
+    "Semi plan: 3–6 users (our email)",
+    "Shared plan: 7–9 users"
+  ],
+  "image": "/images/products/chatgpt-plus.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 3999,
+          "original": 5999
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "ai , writting"
+  ],
+  "createdAt": "2025-11-21T15:23:20.430Z",
+  "updatedAt": "2025-11-21T15:23:20.431Z",
+  "badge": ""
+},
+  {
+  "id": "canva-pro",
+  "name": "Canva Pro",
+  "category": "Design",
+  "price": {
+    "monthly": 299,
+    "original": 449,
+    "display": "PKR 299 /month"
+  },
+  "description": "Features: Premium templates & assets, Background remover & magic tools, Private on customer email. Price: PKR 299 /month",
+  "longDescription": "Features: Premium templates & assets, Background remover & magic tools, Private on customer email. Price: PKR 299 /month",
+  "features": [
+    "Premium templates & assets",
+    "Background remover & magic tools",
+    "Private on customer email"
+  ],
+  "image": "/images/products/canva-pro.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 299,
+          "original": 449
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "design"
+  ],
+  "createdAt": "2025-11-21T15:23:20.431Z",
+  "updatedAt": "2025-11-21T15:23:20.431Z",
+  "badge": ""
+},
+  {
+  "id": "capcut-pro",
+  "name": "CapCut Pro",
+  "category": "Video",
+  "price": {
+    "monthly": 1699,
+    "original": 2549,
+    "display": "PKR 1,699 /month"
+  },
+  "description": "Features: Pro effects & transitions, No watermark, Stock assets, Semi plan: 2 users (our email). Price: PKR 1,699 /month",
+  "longDescription": "Features: Pro effects & transitions, No watermark, Stock assets, Semi plan: 2 users (our email). Price: PKR 1,699 /month",
+  "features": [
+    "Pro effects & transitions",
+    "No watermark",
+    "Stock assets",
+    "Semi plan: 2 users (our email)"
+  ],
+  "image": "/images/products/capcut-pro.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 1699,
+          "original": 2549
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "video"
+  ],
+  "createdAt": "2025-11-21T15:23:20.431Z",
+  "updatedAt": "2025-11-21T15:23:20.431Z",
+  "badge": ""
+},
+  {
+  "id": "adobe-cloud",
+  "name": "Adobe Cloud",
+  "category": "Design",
+  "price": {
+    "monthly": 2499,
+    "original": 3749,
+    "display": "PKR 2,499 /month"
+  },
+  "description": "Features: Full creative suite, Cloud libraries, Regular updates. Price: PKR 2,499 /month",
+  "longDescription": "Features: Full creative suite, Cloud libraries, Regular updates. Price: PKR 2,499 /month",
+  "features": [
+    "Full creative suite",
+    "Cloud libraries",
+    "Regular updates"
+  ],
+  "image": "/images/products/adobe-cloud.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 2499,
+          "original": 3749
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "design"
+  ],
+  "createdAt": "2025-11-21T15:23:20.431Z",
+  "updatedAt": "2025-11-21T15:23:20.431Z",
+  "badge": ""
+},
+  {
+  "id": "elevenlabs-ai",
+  "name": "ElevenLabs AI",
+  "category": "Automation",
+  "price": {
+    "monthly": 2899,
+    "original": 4349,
+    "display": "PKR 2,899 /month"
+  },
+  "description": "Features: Ultra‑realistic voices, Voice cloning, Commercial usage. Price: PKR 2,899 /month",
+  "longDescription": "Features: Ultra‑realistic voices, Voice cloning, Commercial usage. Price: PKR 2,899 /month",
+  "features": [
+    "Ultra‑realistic voices",
+    "Voice cloning",
+    "Commercial usage"
+  ],
+  "image": "/images/products/elevenlabs-ai.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 2899,
+          "original": 4349
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "automation"
+  ],
+  "createdAt": "2025-11-21T15:23:20.431Z",
+  "updatedAt": "2025-11-21T15:23:20.431Z",
+  "badge": ""
+},
+  {
+  "id": "google-veo-3",
+  "name": "Google Veo 3",
+  "category": "Automation",
+  "price": {
+    "monthly": 2999,
+    "original": 4499,
+    "display": "PKR 2,999 /month"
+  },
+  "description": "Features: AI video generation, HD export, ~100 credits per voiceover video. Price: PKR 2,999 /month",
+  "longDescription": "Features: AI video generation, HD export, ~100 credits per voiceover video. Price: PKR 2,999 /month",
+  "features": [
+    "AI video generation",
+    "HD export",
+    "~100 credits per voiceover video"
+  ],
+  "image": "/images/products/google-veo-3.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 2999,
+          "original": 4499
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "automation"
+  ],
+  "createdAt": "2025-11-21T15:23:20.431Z",
+  "updatedAt": "2025-11-21T15:23:20.431Z",
+  "badge": ""
+},
+  {
+  "id": "wa-sender-pro",
+  "name": "WA Sender Pro",
+  "category": "Productivity",
+  "price": {
+    "monthly": 1499,
+    "original": 2249,
+    "display": "PKR 1,499 /month"
+  },
+  "description": "Features: Bulk WhatsApp messaging, Template support, Automation friendly. Price: PKR 1,499 /month",
+  "longDescription": "Features: Bulk WhatsApp messaging, Template support, Automation friendly. Price: PKR 1,499 /month",
+  "features": [
+    "Bulk WhatsApp messaging",
+    "Template support",
+    "Automation friendly"
+  ],
+  "image": "/images/products/wa-sender-pro.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 1499,
+          "original": 2249
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "productivity"
+  ],
+  "createdAt": "2025-11-21T15:23:20.431Z",
+  "updatedAt": "2025-11-21T15:23:20.431Z",
+  "badge": ""
+},
+  {
+  "id": "heygen-ai",
+  "name": "Heygen AI",
+  "category": "AI",
+  "price": {
+    "monthly": 5499,
+    "original": 8249,
+    "display": "PKR 5,499 /month"
+  },
+  "description": "Features: Talking avatars, Studio quality lip‑sync, Commercial use, Shared plan: 7–9 users. Price: PKR 5,499 /month",
+  "longDescription": "Features: Talking avatars, Studio quality lip‑sync, Commercial use, Shared plan: 7–9 users. Price: PKR 5,499 /month",
+  "features": [
+    "Talking avatars",
+    "Studio quality lip‑sync",
+    "Commercial use",
+    "Shared plan: 7–9 users"
+  ],
+  "image": "/images/products/heygen-ai.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 5499,
+          "original": 8249
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "ai"
+  ],
+  "createdAt": "2025-11-21T15:23:20.431Z",
+  "updatedAt": "2025-11-21T15:23:20.431Z",
+  "badge": ""
+},
+  {
+  "id": "runwayml",
+  "name": "RunwayML",
+  "category": "Video",
+  "price": {
+    "monthly": 14999,
+    "original": 22499,
+    "display": "PKR 14,999 /month"
+  },
+  "description": "Features: Gen‑3 video models, Text/Img → Video, Pro editing suite, Semi plan: 3–6 users (our email). Price: PKR 14,999 /month",
+  "longDescription": "Features: Gen‑3 video models, Text/Img → Video, Pro editing suite, Semi plan: 3–6 users (our email). Price: PKR 14,999 /month",
+  "features": [
+    "Gen‑3 video models",
+    "Text/Img → Video",
+    "Pro editing suite",
+    "Semi plan: 3–6 users (our email)"
+  ],
+  "image": "/images/products/runwayml.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 14999,
+          "original": 22499
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "video"
+  ],
+  "createdAt": "2025-11-21T15:23:20.431Z",
+  "updatedAt": "2025-11-21T15:23:20.431Z",
+  "badge": ""
+},
+  {
+  "id": "hailuio-ai",
+  "name": "Hailuio AI",
+  "category": "AI",
+  "price": {
+    "monthly": 44999,
+    "original": 67499,
+    "display": "PKR 44,999 /month"
+  },
+  "description": "Features: Advanced multimodal AI, High‑limit usage, Team friendly, Shared plan: 7–9 users. Price: PKR 44,999 /month",
+  "longDescription": "Features: Advanced multimodal AI, High‑limit usage, Team friendly, Shared plan: 7–9 users. Price: PKR 44,999 /month",
+  "features": [
+    "Advanced multimodal AI",
+    "High‑limit usage",
+    "Team friendly",
+    "Shared plan: 7–9 users"
+  ],
+  "image": "/images/products/hailuio-ai.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 44999,
+          "original": 67499
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "ai"
+  ],
+  "createdAt": "2025-11-21T15:23:20.432Z",
+  "updatedAt": "2025-11-21T15:23:20.432Z",
+  "badge": ""
+},
+  {
+  "id": "freepik-premium-plus",
+  "name": "Freepik Premium Plus",
+  "category": "Design",
+  "price": {
+    "monthly": 4499,
+    "original": 6749,
+    "display": "PKR 4,499 /month"
+  },
+  "description": "Features: Vectors, photos, PSDs, AI assets included (private), Commercial license, Shared plan: 7–9 users. Price: PKR 4,499 /month",
+  "longDescription": "Features: Vectors, photos, PSDs, AI assets included (private), Commercial license, Shared plan: 7–9 users. Price: PKR 4,499 /month",
+  "features": [
+    "Vectors, photos, PSDs",
+    "AI assets included (private)",
+    "Commercial license",
+    "Shared plan: 7–9 users"
+  ],
+  "image": "/images/products/freepik-premium-plus.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 4499,
+          "original": 6749
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "design"
+  ],
+  "createdAt": "2025-11-21T15:23:20.432Z",
+  "updatedAt": "2025-11-21T15:23:20.432Z",
+  "badge": ""
+},
+  {
+  "id": "sora-ai-shared",
+  "name": "Sora AI Shared",
+  "category": "Video",
+  "price": {
+    "monthly": 2199,
+    "original": 3299,
+    "display": "PKR 2,199 /month"
+  },
+  "description": "Features: Text → short video, Creative previews, Shared access, Shared plan: 7–9 users. Price: PKR 2,199 /month",
+  "longDescription": "Features: Text → short video, Creative previews, Shared access, Shared plan: 7–9 users. Price: PKR 2,199 /month",
+  "features": [
+    "Text → short video",
+    "Creative previews",
+    "Shared access",
+    "Shared plan: 7–9 users"
+  ],
+  "image": "/images/products/sora-ai-shared.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 2199,
+          "original": 3299
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "video"
+  ],
+  "createdAt": "2025-11-21T15:23:20.432Z",
+  "updatedAt": "2025-11-21T15:23:20.432Z",
+  "badge": ""
+},
+  {
+  "id": "hedra-ai",
+  "name": "Hedra AI",
+  "category": "AI",
+  "price": {
+    "monthly": 1889,
+    "original": 2834,
+    "display": "PKR 1,889 /month"
+  },
+  "description": "Features: Realtime voice/video, Developer APIs, Commercial usage. Price: PKR 1,889 /month",
+  "longDescription": "Features: Realtime voice/video, Developer APIs, Commercial usage. Price: PKR 1,889 /month",
+  "features": [
+    "Realtime voice/video",
+    "Developer APIs",
+    "Commercial usage"
+  ],
+  "image": "/images/products/hedra-ai.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 1889,
+          "original": 2834
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "ai"
+  ],
+  "createdAt": "2025-11-21T15:23:20.432Z",
+  "updatedAt": "2025-11-21T15:23:20.432Z",
+  "badge": ""
+},
+  {
+  "id": "claude-ai-pro",
+  "name": "Claude AI Pro",
+  "category": "AI",
+  "price": {
+    "monthly": 5399,
+    "original": 8099,
+    "display": "PKR 5,399 /month"
+  },
+  "description": "Features: Claude‑3.5 access, High rate limits, Web & API use, Semi plan: 3–6 users (our email). Price: PKR 5,399 /month",
+  "longDescription": "Features: Claude‑3.5 access, High rate limits, Web & API use, Semi plan: 3–6 users (our email). Price: PKR 5,399 /month",
+  "features": [
+    "Claude‑3.5 access",
+    "High rate limits",
+    "Web & API use",
+    "Semi plan: 3–6 users (our email)"
+  ],
+  "image": "/images/products/claude-ai-pro.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 5399,
+          "original": 8099
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "ai"
+  ],
+  "createdAt": "2025-11-21T15:23:20.432Z",
+  "updatedAt": "2025-11-21T15:23:20.432Z",
+  "badge": ""
+},
+  {
+  "id": "cursor-ai-pro-private",
+  "name": "Cursor AI Pro Private",
+  "category": "Productivity",
+  "price": {
+    "monthly": 4999,
+    "original": 7499,
+    "display": "PKR 4,999 /month"
+  },
+  "description": "Features: AI pair‑programming, Repo chat, Auto‑fix & refactor. Price: PKR 4,999 /month",
+  "longDescription": "Features: AI pair‑programming, Repo chat, Auto‑fix & refactor. Price: PKR 4,999 /month",
+  "features": [
+    "AI pair‑programming",
+    "Repo chat",
+    "Auto‑fix & refactor"
+  ],
+  "image": "/images/products/cursor-ai-pro-private.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 4999,
+          "original": 7499
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "productivity"
+  ],
+  "createdAt": "2025-11-21T15:23:20.432Z",
+  "updatedAt": "2025-11-21T15:23:20.432Z",
+  "badge": ""
+},
+  {
+  "id": "perplexity-enterprise",
+  "name": "Perplexity Enterprise",
+  "category": "AI",
+  "price": {
+    "monthly": 1499,
+    "original": 2249,
+    "display": "PKR 1,499 /month"
+  },
+  "description": "Features: Enterprise search, Citations & sources, Customer mail. Price: PKR 1,499 /month",
+  "longDescription": "Features: Enterprise search, Citations & sources, Customer mail. Price: PKR 1,499 /month",
+  "features": [
+    "Enterprise search",
+    "Citations & sources",
+    "Customer mail"
+  ],
+  "image": "/images/products/perplexity-enterprise.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 1499,
+          "original": 2249
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "ai"
+  ],
+  "createdAt": "2025-11-21T15:23:20.432Z",
+  "updatedAt": "2025-11-21T15:23:20.432Z",
+  "badge": ""
+},
+  {
+  "id": "super-grok-ai",
+  "name": "Super Grok AI",
+  "category": "AI",
+  "price": {
+    "monthly": 4999,
+    "original": 7499,
+    "display": "PKR 4,999 /month"
+  },
+  "description": "Features: Web‑scale model, Fun + powerful, Shared or private, Shared plan: 7–9 users. Price: PKR 4,999 /month",
+  "longDescription": "Features: Web‑scale model, Fun + powerful, Shared or private, Shared plan: 7–9 users. Price: PKR 4,999 /month",
+  "features": [
+    "Web‑scale model",
+    "Fun + powerful",
+    "Shared or private",
+    "Shared plan: 7–9 users"
+  ],
+  "image": "/images/products/super-grok-ai.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 4999,
+          "original": 7499
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "ai"
+  ],
+  "createdAt": "2025-11-21T15:23:20.432Z",
+  "updatedAt": "2025-11-21T15:23:20.432Z",
+  "badge": ""
+},
+  {
+  "id": "vidiq-boost",
+  "name": "VidIQ Boost",
+  "category": "Productivity",
+  "price": {
+    "monthly": 1499,
+    "original": 2249,
+    "display": "PKR 1,499 /month"
+  },
+  "description": "Features: YouTube SEO, Keyword & competitors, Best‑time posting. Price: PKR 1,499 /month",
+  "longDescription": "Features: YouTube SEO, Keyword & competitors, Best‑time posting. Price: PKR 1,499 /month",
+  "features": [
+    "YouTube SEO",
+    "Keyword & competitors",
+    "Best‑time posting"
+  ],
+  "image": "/images/products/vidiq-boost.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 1499,
+          "original": 2249
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "productivity"
+  ],
+  "createdAt": "2025-11-21T15:23:20.432Z",
+  "updatedAt": "2025-11-21T15:23:20.432Z",
+  "badge": ""
+},
+  {
+  "id": "microsoft-office-365",
+  "name": "Microsoft Office 365",
+  "category": "Productivity",
+  "price": {
+    "monthly": 4599,
+    "original": 6899,
+    "display": "PKR 4,599 /year"
+  },
+  "description": "Features: Word, Excel, PowerPoint, Outlook & OneDrive, Guaranteed activation. Price: PKR 4,599 /year",
+  "longDescription": "Features: Word, Excel, PowerPoint, Outlook & OneDrive, Guaranteed activation. Price: PKR 4,599 /year",
+  "features": [
+    "Word, Excel, PowerPoint",
+    "Outlook & OneDrive",
+    "Guaranteed activation"
+  ],
+  "image": "/images/products/microsoft-office-365.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 4599,
+          "original": 6899
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "productivity"
+  ],
+  "createdAt": "2025-11-21T15:23:20.432Z",
+  "updatedAt": "2025-11-21T15:23:20.432Z",
+  "badge": ""
+},
+  {
+  "id": "udemy-private",
+  "name": "Udemy Private",
+  "category": "Productivity",
+  "price": {
+    "monthly": 3999,
+    "original": 5999,
+    "display": "PKR 3,999 /Month"
+  },
+  "description": "Features: Top university courses, Certificates included, Private on customer email. Price: PKR 3,999 /Month",
+  "longDescription": "Features: Top university courses, Certificates included, Private on customer email. Price: PKR 3,999 /Month",
+  "features": [
+    "Top university courses",
+    "Certificates included",
+    "Private on customer email"
+  ],
+  "image": "/images/products/udemy-private.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 3999,
+          "original": 5999
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "productivity"
+  ],
+  "createdAt": "2025-11-21T15:23:20.432Z",
+  "updatedAt": "2025-11-21T15:23:20.432Z",
+  "badge": ""
+},
+  {
+  "id": "leonardo-ai",
+  "name": "Leonardo AI",
+  "category": "AI",
+  "price": {
+    "monthly": 5499,
+    "original": 8249,
+    "display": "PKR 5,499 /month"
+  },
+  "description": "Features: Image generation studio, Models & finetunes, High‑quality outputs, Shared plan: 7–9 users. Price: PKR 5,499 /month",
+  "longDescription": "Features: Image generation studio, Models & finetunes, High‑quality outputs, Shared plan: 7–9 users. Price: PKR 5,499 /month",
+  "features": [
+    "Image generation studio",
+    "Models & finetunes",
+    "High‑quality outputs",
+    "Shared plan: 7–9 users"
+  ],
+  "image": "/images/products/leonardo-ai.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 5499,
+          "original": 8249
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "ai"
+  ],
+  "createdAt": "2025-11-21T15:23:20.432Z",
+  "updatedAt": "2025-11-21T15:23:20.432Z",
+  "badge": ""
+},
+  {
+  "id": "midjourney-standard",
+  "name": "Midjourney Standard",
+  "category": "Creative",
+  "price": {
+    "monthly": 3499,
+    "original": 5249,
+    "display": "PKR 3,499 /month"
+  },
+  "description": "Features: Fast image gen, Upscale & variations, Community access, Shared plan: 7–9 users. Price: PKR 3,499 /month",
+  "longDescription": "Features: Fast image gen, Upscale & variations, Community access, Shared plan: 7–9 users. Price: PKR 3,499 /month",
+  "features": [
+    "Fast image gen",
+    "Upscale & variations",
+    "Community access",
+    "Shared plan: 7–9 users"
+  ],
+  "image": "/images/products/midjourney-standard.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 3499,
+          "original": 5249
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "creative"
+  ],
+  "createdAt": "2025-11-21T15:23:20.432Z",
+  "updatedAt": "2025-11-21T15:23:20.432Z",
+  "badge": ""
+},
+  {
+  "id": "ideogram-plus",
+  "name": "Ideogram Plus",
+  "category": "Creative",
+  "price": {
+    "monthly": 2999,
+    "original": 4499,
+    "display": "PKR 2,999 /month"
+  },
+  "description": "Features: Typography‑perfect art, Logos & posters, Commercial use. Price: PKR 2,999 /month",
+  "longDescription": "Features: Typography‑perfect art, Logos & posters, Commercial use. Price: PKR 2,999 /month",
+  "features": [
+    "Typography‑perfect art",
+    "Logos & posters",
+    "Commercial use"
+  ],
+  "image": "/images/products/ideogram-plus.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 2999,
+          "original": 4499
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "creative"
+  ],
+  "createdAt": "2025-11-21T15:23:20.432Z",
+  "updatedAt": "2025-11-21T15:23:20.432Z",
+  "badge": ""
+},
+  {
+  "id": "playht-creator",
+  "name": "PlayHT Creator",
+  "category": "Automation",
+  "price": {
+    "monthly": 2999,
+    "original": 4499,
+    "display": "PKR 2,999 /month"
+  },
+  "description": "Features: Neural voices, Cloning & SSML, Studio export. Price: PKR 2,999 /month",
+  "longDescription": "Features: Neural voices, Cloning & SSML, Studio export. Price: PKR 2,999 /month",
+  "features": [
+    "Neural voices",
+    "Cloning & SSML",
+    "Studio export"
+  ],
+  "image": "/images/products/playht-creator.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 2999,
+          "original": 4499
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "automation"
+  ],
+  "createdAt": "2025-11-21T15:23:20.432Z",
+  "updatedAt": "2025-11-21T15:23:20.432Z",
+  "badge": ""
+},
+  {
+  "id": "fishaudio-premium",
+  "name": "FishAudio Premium",
+  "category": "Automation",
+  "price": {
+    "monthly": 3799,
+    "original": 5699,
+    "display": "PKR 3,799 /month"
+  },
+  "description": "Features: TTS & voice cloning, Multiple speakers, Commercial usage. Price: PKR 3,799 /month",
+  "longDescription": "Features: TTS & voice cloning, Multiple speakers, Commercial usage. Price: PKR 3,799 /month",
+  "features": [
+    "TTS & voice cloning",
+    "Multiple speakers",
+    "Commercial usage"
+  ],
+  "image": "/images/products/fishaudio-premium.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 3799,
+          "original": 5699
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "automation"
+  ],
+  "createdAt": "2025-11-21T15:23:20.432Z",
+  "updatedAt": "2025-11-21T15:23:20.432Z",
+  "badge": ""
+},
+  {
+  "id": "google-drive-storage",
+  "name": "Google Drive Storage",
+  "category": "Productivity",
+  "price": {
+    "monthly": 10999,
+    "original": 16499,
+    "display": "PKR 10,999 /year"
+  },
+  "description": "Features: Family sharing, Secure cloud storage, Customer mail access. Price: PKR 10,999 /year",
+  "longDescription": "Features: Family sharing, Secure cloud storage, Customer mail access. Price: PKR 10,999 /year",
+  "features": [
+    "Family sharing",
+    "Secure cloud storage",
+    "Customer mail access"
+  ],
+  "image": "/images/products/google-drive-storage.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 10999,
+          "original": 16499
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "productivity"
+  ],
+  "createdAt": "2025-11-21T15:23:20.432Z",
+  "updatedAt": "2025-11-21T15:23:20.432Z",
+  "badge": ""
+},
+  {
+  "id": "filmora",
+  "name": "Filmora",
+  "category": "Video",
+  "price": {
+    "monthly": 11999,
+    "original": 17999,
+    "display": "PKR 11,999 /year"
+  },
+  "description": "Features: Easy pro editor, AI features, Huge effects, Shared plan: 7–9 users. Price: PKR 11,999 /year",
+  "longDescription": "Features: Easy pro editor, AI features, Huge effects, Shared plan: 7–9 users. Price: PKR 11,999 /year",
+  "features": [
+    "Easy pro editor",
+    "AI features",
+    "Huge effects",
+    "Shared plan: 7–9 users"
+  ],
+  "image": "/images/products/filmora.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 11999,
+          "original": 17999
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "video"
+  ],
+  "createdAt": "2025-11-21T15:23:20.432Z",
+  "updatedAt": "2025-11-21T15:23:20.432Z",
+  "badge": ""
+},
+  {
+  "id": "idm-license-key",
+  "name": "IDM License Key",
+  "category": "Productivity",
+  "price": {
+    "monthly": 3999,
+    "original": 5999,
+    "display": "PKR 3,999 /year"
+  },
+  "description": "Features: Original license key, Auto updates, 1‑year validity. Price: PKR 3,999 /year",
+  "longDescription": "Features: Original license key, Auto updates, 1‑year validity. Price: PKR 3,999 /year",
+  "features": [
+    "Original license key",
+    "Auto updates",
+    "1‑year validity"
+  ],
+  "image": "/images/products/idm-license-key.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 3999,
+          "original": 5999
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "productivity"
+  ],
+  "createdAt": "2025-11-21T15:23:20.432Z",
+  "updatedAt": "2025-11-21T15:23:20.432Z",
+  "badge": ""
+},
+  {
+  "id": "semrush-shared",
+  "name": "Semrush (Shared)",
+  "category": "SEO",
+  "price": {
+    "monthly": 899,
+    "original": 1349,
+    "display": "PKR 899 /month"
+  },
+  "description": "Features: Keyword research, Site audits, Competitor insights, Shared plan: 7–9 users. Price: PKR 899 /month",
+  "longDescription": "Features: Keyword research, Site audits, Competitor insights, Shared plan: 7–9 users. Price: PKR 899 /month",
+  "features": [
+    "Keyword research",
+    "Site audits",
+    "Competitor insights",
+    "Shared plan: 7–9 users"
+  ],
+  "image": "/images/products/semrush-shared.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 899,
+          "original": 1349
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "seo"
+  ],
+  "createdAt": "2025-11-21T15:23:20.432Z",
+  "updatedAt": "2025-11-21T15:23:20.432Z",
+  "badge": ""
+},
+  {
+  "id": "turnitin-shared",
+  "name": "Turnitin (Shared)",
+  "category": "Writing",
+  "price": {
+    "monthly": 799,
+    "original": 1199,
+    "display": "PKR 799 /month"
+  },
+  "description": "Features: Plagiarism check, Similarity reports, Academic use, Shared plan: 7–9 users. Price: PKR 799 /month",
+  "longDescription": "Features: Plagiarism check, Similarity reports, Academic use, Shared plan: 7–9 users. Price: PKR 799 /month",
+  "features": [
+    "Plagiarism check",
+    "Similarity reports",
+    "Academic use",
+    "Shared plan: 7–9 users"
+  ],
+  "image": "/images/products/turnitin-shared.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 799,
+          "original": 1199
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "writing"
+  ],
+  "createdAt": "2025-11-21T15:23:20.432Z",
+  "updatedAt": "2025-11-21T15:23:20.432Z",
+  "badge": ""
+},
+  {
+  "id": "grammarly-shared",
+  "name": "Grammarly (Shared)",
+  "category": "Writing",
+  "price": {
+    "monthly": 899,
+    "original": 1349,
+    "display": "PKR 899 /month"
+  },
+  "description": "Features: Grammar & tone, Rewrite & suggest, Browser extension, Shared plan: 7–9 users. Price: PKR 899 /month",
+  "longDescription": "Features: Grammar & tone, Rewrite & suggest, Browser extension, Shared plan: 7–9 users. Price: PKR 899 /month",
+  "features": [
+    "Grammar & tone",
+    "Rewrite & suggest",
+    "Browser extension",
+    "Shared plan: 7–9 users"
+  ],
+  "image": "/images/products/grammarly-shared.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 899,
+          "original": 1349
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "writing"
+  ],
+  "createdAt": "2025-11-21T15:23:20.432Z",
+  "updatedAt": "2025-11-21T15:23:20.432Z",
+  "badge": ""
+},
+  {
+  "id": "stealth-writer-pro",
+  "name": "Stealth Writer Pro",
+  "category": "Writing",
+  "price": {
+    "monthly": 5999,
+    "original": 8999,
+    "display": "PKR 5,999 /month"
+  },
+  "description": "Features: Bypass AI detection, Smart paraphrasing, Export ready. Price: PKR 5,999 /month",
+  "longDescription": "Features: Bypass AI detection, Smart paraphrasing, Export ready. Price: PKR 5,999 /month",
+  "features": [
+    "Bypass AI detection",
+    "Smart paraphrasing",
+    "Export ready"
+  ],
+  "image": "/images/products/stealth-writer-pro.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 5999,
+          "original": 8999
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "writing"
+  ],
+  "createdAt": "2025-11-21T15:23:20.432Z",
+  "updatedAt": "2025-11-21T15:23:20.432Z",
+  "badge": ""
+},
+  {
+  "id": "ahrefs-lite-shared",
+  "name": "Ahrefs Lite (Shared)",
+  "category": "SEO",
+  "price": {
+    "monthly": 5999,
+    "original": 8999,
+    "display": "PKR 5,999 /month"
+  },
+  "description": "Features: Backlinks & keywords, Site Explorer, Batch analysis, Shared plan: 7–9 users. Price: PKR 5,999 /month",
+  "longDescription": "Features: Backlinks & keywords, Site Explorer, Batch analysis, Shared plan: 7–9 users. Price: PKR 5,999 /month",
+  "features": [
+    "Backlinks & keywords",
+    "Site Explorer",
+    "Batch analysis",
+    "Shared plan: 7–9 users"
+  ],
+  "image": "/images/products/ahrefs-lite-shared.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 5999,
+          "original": 8999
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "seo"
+  ],
+  "createdAt": "2025-11-21T15:23:20.432Z",
+  "updatedAt": "2025-11-21T15:23:20.432Z",
+  "badge": ""
+},
+  {
+  "id": "lovable-pro-3-months",
+  "name": "Lovable Pro 3 Months",
+  "category": "Productivity",
+  "price": {
+    "monthly": 4599,
+    "original": 6899,
+    "display": "PKR 4,599 /month"
+  },
+  "description": "Features: AI app builder, Deploy fast, Team features. Price: PKR 4,599 /month",
+  "longDescription": "Features: AI app builder, Deploy fast, Team features. Price: PKR 4,599 /month",
+  "features": [
+    "AI app builder",
+    "Deploy fast",
+    "Team features"
+  ],
+  "image": "/images/products/lovable-pro-3-months.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 4599,
+          "original": 6899
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "productivity"
+  ],
+  "createdAt": "2025-11-21T15:23:20.432Z",
+  "updatedAt": "2025-11-21T15:23:20.432Z",
+  "badge": ""
+},
+  {
+  "id": "replit-team",
+  "name": "Replit Team",
+  "category": "Productivity",
+  "price": {
+    "monthly": 4999,
+    "original": 7499,
+    "display": "PKR 4,999 /month"
+  },
+  "description": "Features: Cloud IDE, Deployments, Collaboration. Price: PKR 4,999 /month",
+  "longDescription": "Features: Cloud IDE, Deployments, Collaboration. Price: PKR 4,999 /month",
+  "features": [
+    "Cloud IDE",
+    "Deployments",
+    "Collaboration"
+  ],
+  "image": "/images/products/replit-team.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 4999,
+          "original": 7499
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "productivity"
+  ],
+  "createdAt": "2025-11-21T15:23:20.432Z",
+  "updatedAt": "2025-11-21T15:23:20.432Z",
+  "badge": ""
+},
+  {
+  "id": "nordvpn",
+  "name": "NordVPN",
+  "category": "VPN",
+  "price": {
+    "monthly": 1999,
+    "original": 2999,
+    "display": "PKR 1,999 /month"
+  },
+  "description": "Features: Top privacy, Meshnet & ThreatShield, Streaming unlock, Shared plan: 7–9 users. Price: PKR 1,999 /month",
+  "longDescription": "Features: Top privacy, Meshnet & ThreatShield, Streaming unlock, Shared plan: 7–9 users. Price: PKR 1,999 /month",
+  "features": [
+    "Top privacy",
+    "Meshnet & ThreatShield",
+    "Streaming unlock",
+    "Shared plan: 7–9 users"
+  ],
+  "image": "/images/products/nordvpn.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 1999,
+          "original": 2999
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "vpn"
+  ],
+  "createdAt": "2025-11-21T15:23:20.432Z",
+  "updatedAt": "2025-11-21T15:23:20.432Z",
+  "badge": ""
+},
+  {
+  "id": "youtube-premium-individual",
+  "name": "YouTube Premium (Individual)",
+  "category": "Productivity",
+  "price": {
+    "monthly": 449,
+    "original": 674,
+    "display": "PKR 449 /month"
+  },
+  "description": "Features: Ad‑free YouTube, Background play, Music Premium. Price: PKR 449 /month",
+  "longDescription": "Features: Ad‑free YouTube, Background play, Music Premium. Price: PKR 449 /month",
+  "features": [
+    "Ad‑free YouTube",
+    "Background play",
+    "Music Premium"
+  ],
+  "image": "/images/products/youtube-premium-individual.png",
+  "images": [],
+  "popular": false,
+  "plans": [
+    {
+      "type": "Standard",
+      "description": "Standard subscription plan",
+      "durations": [
+        {
+          "duration": "1 Month",
+          "price": 449,
+          "original": 674
+        }
+      ]
+    }
+  ],
+  "stock": true,
+  "rating": 5,
+  "tags": [
+    "productivity"
+  ],
+  "createdAt": "2025-11-21T15:23:20.432Z",
+  "updatedAt": "2025-11-21T15:23:20.432Z",
+  "badge": ""
+}];
