@@ -46,8 +46,25 @@ export const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       const supabaseProducts = await ProductsService.getProducts();
       if (supabaseProducts && supabaseProducts.length > 0) {
         const clientProducts = supabaseProducts.map(ProductsService.convertToClientFormat);
-        setProductsState(clientProducts);
-        console.log('✅ Products loaded from Supabase');
+
+        // Check if there are missing products from defaultProducts
+        const existingIds = new Set(supabaseProducts.map(p => p.id));
+        const missingProducts = defaultProducts.filter(p => !existingIds.has(p.id));
+
+        if (missingProducts.length > 0) {
+          console.log(`🔄 Syncing ${missingProducts.length} missing products to database...`);
+
+          // Sync missing products to database
+          const missingDbProducts = missingProducts.map(ProductsService.convertToDatabaseFormat);
+          await ProductsService.updateProducts([...supabaseProducts, ...missingDbProducts]);
+
+          // Update state with all products
+          setProductsState([...clientProducts, ...missingProducts]);
+          console.log(`✅ ${missingProducts.length} missing products synced successfully`);
+        } else {
+          setProductsState(clientProducts);
+          console.log('✅ Products loaded from Supabase');
+        }
       } else {
         // If no products in database, use default products and sync them
         console.log('📦 No products in database, using defaults');
@@ -56,6 +73,7 @@ export const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         // Sync default products to database
         const dbProducts = defaultProducts.map(ProductsService.convertToDatabaseFormat);
         await ProductsService.updateProducts(dbProducts);
+        console.log('✅ All default products synced to database');
       }
     } catch (error) {
       console.error('Failed to load products from Supabase:', error);
